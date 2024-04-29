@@ -23,7 +23,8 @@ const sizeMap = Object.freeze({
     small: 'h-6 px-1 text-xs',
 });
 const colorMap = Object.freeze({
-    primary: 'text-white bg-primary enabled:hover:bg-blue-400 enabled:active:focus:bg-blue-500 disabled:opacity-60',
+    primary:
+        'text-white bg-primary enabled:tablet:hover:bg-blue-400 enabled:active:focus:bg-blue-500 disabled:opacity-60',
     secondary:
         'text-brand border border-primary enabled:active:opacity-70 disabled:opacity-60 disabled:border-gray-200 disabled:text-gray-400',
 });

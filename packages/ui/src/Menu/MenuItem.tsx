@@ -9,8 +9,8 @@ export interface MenuItemProps {
     className?: string;
 }
 
-const DEFAULT_ITEM_CLASSES = 'text-primary hover:text-brand hover:bg-gray-50';
-const DARK_ITEM_CLASSES = 'dark:text-primary-dark dark:hover:bg-blue-100';
+const DEFAULT_ITEM_CLASSES = 'text-primary tablet:hover:text-brand tablet:hover:bg-gray-50';
+const DARK_ITEM_CLASSES = 'dark:text-primary-dark tablet:dark:hover:bg-blue-100';
 export function renderMenuTitle(menu: MenuItem, level = 0, active = false) {
     const classes = classNames('py-2.5 px-4 cursor-pointer transation-all duration-150 rounded-feedback select-none', [
         active ? 'font-semibold text-white bg-primary' : [DEFAULT_ITEM_CLASSES, DARK_ITEM_CLASSES],

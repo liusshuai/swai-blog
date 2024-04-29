@@ -15,7 +15,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>((props, ref) => {
             'p-5',
             'rounded-card',
             'bg-content dark:bg-content-dark',
-            shadow === 'always' ? 'shadow-sm' : shadow === 'hover' ? 'hover:shadow-sm' : '',
+            shadow === 'always' ? 'shadow-sm' : shadow === 'hover' ? 'tablet:hover:shadow-sm' : '',
         ],
         className,
     );

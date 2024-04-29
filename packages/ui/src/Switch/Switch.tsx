@@ -41,7 +41,7 @@ const Switch: React.FC<SwitchProps> = (props) => {
         'rounded-full relative transition-all duration-200',
         CONTROL_WIDTH[_size],
         CONTROL_HEIGHT[_size],
-        [props.value ? 'bg-primary hover:bg-blue-400' : 'bg-gray-500 hover:bg-gray-400'],
+        [props.value ? 'bg-primary tablet:hover:bg-blue-400' : 'bg-gray-300 tablet:hover:bg-gray-400'],
         props.className,
     );
 
