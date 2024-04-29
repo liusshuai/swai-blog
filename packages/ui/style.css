@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    font-family: 'Lato', 'Helvetica', 'Arial', 'PingFangSC-Regular', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑',
+        'Microsoft JhengHei';
+    font-size: var(--sw-font-size-base);
+    color: var(--sw-text-color-base);
+}

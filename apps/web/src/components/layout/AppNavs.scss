@@ -1,0 +1,14 @@
+.app-navs {
+    & a {
+        @apply relative w-full flex justify-between items-center tablet:w-auto;
+        &::after {
+            content: ' ';
+            @apply absolute bg-current rounded-[2px] transition-all duration-200;
+            @apply tablet:left-1/2 tablet:bottom-0 tablet:h-0 tablet:w-6 tablet:-translate-x-1/2;
+        }
+
+        &.is-active::after {
+            @apply tablet:h-1;
+        }
+    }
+}

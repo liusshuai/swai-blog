@@ -1,0 +1,12 @@
+node_modules
+.next
+dist
+lib
+
+.eslintcache
+tsconfig.tsbuildinfo
+
+# ignore app server configs
+apps/server/config/*
+
+!packages/types/lib

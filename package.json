@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "scripts": {
+    "serve": "turbo run serve",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "packageManager": "pnpm@8.6.12",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/supertest": "^6.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "supertest": "^6.3.4",
+    "ts-node": "^10.9.2",
+    "turbo": "^1.12.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  }
+}

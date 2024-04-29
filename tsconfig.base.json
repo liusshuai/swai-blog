@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES2019",
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "resolveJsonModule": true,
+        "strict": true,
+        "noImplicitThis": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "useUnknownInCatchVariables": false,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "lib": [
+            "DOM",
+            "ES2019"
+        ]
+    }
+}

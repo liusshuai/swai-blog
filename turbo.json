@@ -1,0 +1,8 @@
+{
+    "pipeline": {
+        "serve": {
+            "cache": false,
+            "persistent": true
+        }
+    }
+}

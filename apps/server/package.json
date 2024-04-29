@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon"
+  },
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "@swai/route-controller": "workspace:^",
+    "@swai/types": "workspace:*",
+    "axios": "^1.6.7",
+    "js-yaml": "^4.1.0",
+    "koa": "^2.15.0",
+    "lodash": "^4.17.21"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/koa": "^2.14.0",
+    "@types/lodash": "^4.14.202",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
+  }
+}
