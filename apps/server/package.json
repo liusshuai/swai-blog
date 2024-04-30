@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "nodemon",
     "build": "rm -rf dist && tsc -b && tsc-alias",
-    "start": "NODE_ENV=production node ./dist/index.js"
+    "start": "cross-env NODE_ENV=production node ./dist/index.js"
   },
   "dependencies": {
     "@koa/cors": "^5.0.0",
@@ -24,6 +24,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/koa": "^2.14.0",
     "@types/lodash": "^4.14.202",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.8",

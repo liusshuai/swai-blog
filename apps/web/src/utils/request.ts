@@ -1,5 +1,5 @@
 export function get<T>(api: string, params?: Record<string, string>) {
-    const url = new URL(`http://localhost:3001${api}`);
+    const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${api}`);
 
     if (params) {
         for (const k in params) {
