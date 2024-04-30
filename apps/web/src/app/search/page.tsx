@@ -4,7 +4,7 @@ import { get } from '@/utils/request';
 import { DocSearchResult } from '@swai/types';
 import { Card, Typography } from '@swai/ui';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import './style.scss';
 import Link from 'next/link';
 import { observer } from 'mobx-react-lite';
@@ -57,4 +57,8 @@ const SearchResultPage = observer(({ store }: { store: typeof rootStore }) => {
     );
 });
 
-export default () => <SearchResultPage store={rootStore} />;
+export default () => (
+    <Suspense>
+        <SearchResultPage store={rootStore} />
+    </Suspense>
+);
