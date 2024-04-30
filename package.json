@@ -3,6 +3,7 @@
   "scripts": {
     "serve": "turbo run serve",
     "build:app": "turbo run build --filter=ui --filter=icon --filter=web",
+    "build:server": "turbo run build --filter=route-controller --filter=server",
     "test": "vitest"
   },
   "keywords": [],
