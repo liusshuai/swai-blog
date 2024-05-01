@@ -2,11 +2,13 @@
 import { useEffect } from 'react';
 import hljs from 'highlight.js/lib/core';
 import typescript from 'highlight.js/lib/languages/typescript';
+import json from 'highlight.js/lib/languages/json';
 import 'highlight.js/styles/github-dark.css';
 import './style.scss';
 
 hljs.registerLanguage('typescript', typescript);
 hljs.registerLanguage('javascript', typescript);
+hljs.registerLanguage('json', json);
 
 export default function DocDetail({ content, sourceUrl }: { content: string; sourceUrl: string }) {
     useEffect(() => {
