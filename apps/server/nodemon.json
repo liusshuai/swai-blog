@@ -3,6 +3,6 @@
         "src"
     ],
     "ext": "ts",
-    "exec": "export NODE_ENV=development && ts-node -r tsconfig-paths/register src/index.ts",
+    "exec": "export NODE_ENV=development PORT=3001 && ts-node -r tsconfig-paths/register src/index.ts",
     "ignore": []
 }

@@ -10,7 +10,7 @@
   "scripts": {
     "example": "nodemon ./example/index.ts",
     "serve": "tsc -b -w",
-    "build": "rm -rf lib && tsc -b"
+    "build": "tsc -b"
   },
   "keywords": [],
   "author": "",

@@ -3,7 +3,7 @@
     "compilerOptions": {
         "composite": true,
         "baseUrl": ".",
-        "rootDir": "src",
+        "rootDir": "./src",
         "module": "CommonJS",
         "outDir": "lib",
         "declaration": true

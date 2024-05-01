@@ -7,6 +7,17 @@
         "build": {
             "dependsOn": [
                 "^build"
+            ],
+            "inputs": [
+                "src/**",
+                "package.json",
+                "tsconfig.json"
+            ],
+            "outputs": [
+                "dist/**",
+                "lib/**",
+                ".next/**",
+                "!.next/cache/**"
             ]
         }
     }
