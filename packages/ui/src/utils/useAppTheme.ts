@@ -33,9 +33,13 @@ export default function useAppTheme() {
     };
 }
 
+function getThemeFromSystem() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? APP_THEME.Dark : APP_THEME.Light; 
+}
+
 function getThemeFromLocal(key: string) {
     const local = localStorage.getItem(key);
-    return (local || APP_THEME.Light) as APP_THEME;
+    return (local || getThemeFromSystem()) as APP_THEME;
 }
 
 function setThemeToLocal(key: string, theme: keyof typeof APP_THEME) {
