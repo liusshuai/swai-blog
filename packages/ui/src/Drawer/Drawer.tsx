@@ -141,7 +141,6 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                                   ...defaultStyle,
                                   ...transitionStyles[state],
                               }}
-                              onClick={(e) => e.stopPropagation()}
                           >
                               {props.title ? (
                                   <div

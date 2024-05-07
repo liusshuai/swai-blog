@@ -35,7 +35,9 @@ const Overlay: React.FC<OverlayProps> = (props) => {
             }}
             onClick={props.onClick}
         >
-            {props.children}
+            <div className={getClassNames('overlay__body')} onClick={(e) => e.stopPropagation()}>
+                {props.children}
+            </div>
         </div>
     );
 };

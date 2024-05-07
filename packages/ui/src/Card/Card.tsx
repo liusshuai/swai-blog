@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
 
-export interface CardProps extends ComponentContext {
+export interface CardProps extends ComponentContext, React.HTMLAttributes<HTMLElement> {
     shadow?: 'always' | 'hover' | 'never';
 }
 
