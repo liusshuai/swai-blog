@@ -24,7 +24,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <body className="h-full bg-page overflow-y-auto dark:bg-page-dark">
                 <AppHeader />
                 <main className="my-5 tablet:my-10">{children}</main>
-                {/* <AppFooter /> */}
+                <AppFooter />
             </body>
         </html>
     );
