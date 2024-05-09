@@ -5,6 +5,8 @@
         "rootDir": "./src",
         "outDir": "dist",
         "module": "CommonJS",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "paths": {
             "@/*": ["./src/*"]
         }

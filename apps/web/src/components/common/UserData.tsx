@@ -1,12 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Typography } from '@swai/ui';
+import { Button, Typography } from '@swai/ui';
 import { observer } from 'mobx-react-lite';
-import RssButton from './RssButton';
 import rootStore from '../../store/rootStore';
+import touristStore from '../../store/touristStore';
+import { DoneAllIcon, RssIcon } from '@swai/icon';
 
-const UserDataOb = observer(({ store }: { store: typeof rootStore }) =>
+const UserDataOb = observer(({ store, touristStore }: { store: typeof rootStore; touristStore: typeof touristStore; }) =>
     store.state.userInfo ? (
         <div>
             <div className={`w-40 h-40 rounded-full mx-auto overflow-hidden`}>
@@ -18,7 +19,9 @@ const UserDataOb = observer(({ store }: { store: typeof rootStore }) =>
                 </Typography>
                 <Typography type="body2">{store.state.userInfo.slogan}</Typography>
             </div>
-            <RssButton />
+            <Button className="my-5" size="large" round fullWidth icon={touristStore.state.profile ? <DoneAllIcon size={20} /> : <RssIcon size={20} />}>
+                {touristStore.state.profile ? '已订阅' : '订阅我' }
+            </Button>
             <div className="grid grid-cols-3 py-4 border-t border-b dark:border-divider-dark">
                 <div className="text-center">
                     <Typography type="subtitle">{store.state.userInfo.follower}</Typography>
@@ -44,5 +47,5 @@ const UserDataOb = observer(({ store }: { store: typeof rootStore }) =>
 );
 
 export default function UserData() {
-    return <UserDataOb store={rootStore} />;
+    return <UserDataOb store={rootStore} touristStore={touristStore} />;
 }

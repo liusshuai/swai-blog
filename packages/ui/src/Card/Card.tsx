@@ -7,7 +7,7 @@ export interface CardProps extends ComponentContext, React.HTMLAttributes<HTMLEl
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>((props, ref) => {
-    const { shadow = 'always', className, style, children } = props;
+    const { shadow = 'always', className, style, children, ...extraProps } = props;
 
     const classes = getClassNames(
         `card`,
@@ -21,7 +21,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>((props, ref) => {
     );
 
     return (
-        <div ref={ref} className={classes} style={style}>
+        <div ref={ref} className={classes} style={style} {...extraProps}>
             {children}
         </div>
     );

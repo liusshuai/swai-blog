@@ -8,11 +8,41 @@ export function get<T>(api: string, params?: Record<string, string>) {
     }
 
     return new Promise<T>((resolve, reject) => {
-        fetch(url.href)
+        fetch(url.href, {
+            method: 'GET',
+            credentials: 'include',
+        })
             .then((res) => {
                 res.json()
                     .then((data) => {
                         resolve(data.data);
+                    })
+                    .catch(reject);
+            })
+            .catch(reject);
+    });
+}
+
+export function post<T>(api: string, data?: Record<string, any>) {
+    const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${api}`);
+
+    return new Promise<T>((resolve, reject) => {
+        fetch(url.href, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(data),
+        })
+            .then((res) => {
+                res.json()
+                    .then((data) => {
+                        if (data.code === 200) {
+                            resolve(data.data);
+                        } else {
+                            reject(new Error(data.msg));
+                        }
                     })
                     .catch(reject);
             })

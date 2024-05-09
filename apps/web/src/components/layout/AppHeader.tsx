@@ -8,6 +8,8 @@ import AppSearchBar from './AppSearchBar';
 import { Drawer } from '@swai/ui';
 import MobileSide from './MobileSide';
 import { usePathname } from 'next/navigation';
+import TouristAvatar from '../common/TouristAvatar';
+import TouristFormDialog from '../common/TouristFormDialog';
 
 export default function AppHeader() {
     const pathname = usePathname();
@@ -35,12 +37,13 @@ export default function AppHeader() {
                     <AppNavs />
                     <AppSearchBar />
                     <Switch
-                        className="ms-5"
+                        className="mx-5"
                         value={theme === APP_THEME.Dark}
                         activeText="浅色"
                         inactiveText="深色"
                         onChange={onModeChange}
                     />
+                    <TouristAvatar />
                 </div>
             </div>
             {openSearch ? (
@@ -52,6 +55,8 @@ export default function AppHeader() {
             <Drawer className="tablet:hidden" open={openMenu} title={<span></span>} onClose={() => setOpenMenu(false)}>
                 <MobileSide />
             </Drawer>
+
+            <TouristFormDialog />
         </header>
     );
 }
