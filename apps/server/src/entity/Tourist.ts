@@ -1,5 +1,5 @@
 import { TouristEntity } from "@swai/types";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Tourist implements TouristEntity {
@@ -40,4 +40,16 @@ export class Tourist implements TouristEntity {
         comment: '游客上一次浏览的token',
     })
     last_visit_token!: string;
+
+    @Column({
+        default: false,
+        comment: '游客是否取消订阅，取消订阅将不会被推送新文章，但是还会收到相关评论的回复',
+    })
+    un_followed!: boolean;
+
+    @CreateDateColumn()
+    create_at!: Date;
+
+    @UpdateDateColumn()
+    update_at!: Date;
 }
