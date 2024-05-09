@@ -3,6 +3,8 @@ import { AssertParams, AsyncRouteController, RouteController, RouteControllerRes
 import yqsdk from '@/utils/yuquesdk';
 import { DocDetail } from '@swai/types';
 import { pick } from 'lodash';
+import { AppDataSource } from '@/common/database';
+import { DocLiked } from '@/entity/DocLIked';
 
 interface GetDocDetailControllerParams {
     id: number;
@@ -27,6 +29,12 @@ class GetDocDetailController
             throw new Error(`Can not find doc by id: ${id}`);
         }
 
+        const docLikedRepo = AppDataSource.getRepository(DocLiked);
+        const count = await docLikedRepo.count({
+            where: { docId: id }
+        });
+
+        data.likes_count += count;
         const result: any = pick(data, [
             'id',
             'slug',
