@@ -5,7 +5,8 @@ import { Doc } from '@swai/types';
 import { pick } from 'lodash';
 import { AppDataSource } from '@/common/database';
 import { DocLiked } from '@/entity/DocLIked';
-import { In } from 'typeorm';
+import { CommentRepository } from '@/utils/CommentRepository';
+import { CommentType } from '@/entity/ContentComment';
 
 interface GetDocListControllerParams {
     page: number;
@@ -31,12 +32,15 @@ class GetDocListController implements AsyncRouteController<GetDocListControllerP
         const docIds = list.map((item) => item.id);
 
         const docLikedRepo = AppDataSource.getRepository(DocLiked);
-        const counts = await Promise.all(docIds.map((id) => docLikedRepo.count({
+        const likedCounts = await Promise.all(docIds.map((id) => docLikedRepo.count({
             where: { docId: id }
         })));
 
+        const commentCounts = await Promise.all(docIds.map((id) => CommentRepository.getContentCommentCount(CommentType.DOC, id)));
+
         const result = list.map((doc, i) => {
-            doc.likes_count += (counts[i] || 0);
+            doc.likes_count += (likedCounts[i] || 0);
+            doc.comment_count = (commentCounts[i] || 0);
 
             return pick(doc, [
                 'id',
@@ -49,6 +53,7 @@ class GetDocListController implements AsyncRouteController<GetDocListControllerP
                 'likes_count',
                 'read_count',
                 'word_count',
+                'comment_count',
                 'created_at',
                 'updated_at',
             ]);

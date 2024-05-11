@@ -3,6 +3,7 @@ import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
 import { CONTROL_HEIGHT } from '../utils/constants';
 import { ComponentSize } from '../types/ComponentTypes';
+import { formControlClasses } from '../Form/utils';
 
 export interface InputProps
     extends Omit<ComponentContext, 'children'>,
@@ -24,7 +25,8 @@ const Input: React.FC<InputProps> = (props) => {
         () =>
             getClassNames(
                 'input',
-                'flex items-center border rounded bg-white overflow-hidden text-primary',
+                formControlClasses(),
+                'flex items-center',
                 CONTROL_HEIGHT[_size],
                 {
                     'rounded-full': round,
@@ -36,9 +38,9 @@ const Input: React.FC<InputProps> = (props) => {
 
     return (
         <div className={classes} style={style}>
-            {prepend ? <span className="p-1">{prepend}</span> : null}
-            <input className="w-full h-full outline-none px-2" {...extraProps} />
-            {append ? <span className="p-1">{append}</span> : null}
+            {prepend ? <span className="p-1 shrink-0">{prepend}</span> : null}
+            <input className="grow h-full outline-none px-2 bg-transparent" {...extraProps} />
+            {append ? <span className="p-1 shrink-0">{append}</span> : null}
         </div>
     );
 };

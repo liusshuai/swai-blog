@@ -61,7 +61,10 @@ const Dialog: React.FC<DialogProps> = (props) => {
     const overlayClasses = getClassNames('dialog__overlay', [
         'flex justify-center items-center'
     ]);
-    const dialogClasses = getClassNames('dialog', props.className);
+    const dialogClasses = getClassNames('dialog', [
+        'max-h-[60vh]',
+        'flex flex-col',
+    ], props.className);
 
     function onExited() {
         setShow(false);
@@ -94,6 +97,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
                             <div
                                 className={getClassNames(
                                     'dialog__head',
+                                    'shrink-0',
                                     'flex',
                                     'justify-between',
                                     'items-center',
@@ -106,10 +110,10 @@ const Dialog: React.FC<DialogProps> = (props) => {
                                 {showClose ? <CloseIcon size={20} className="cursor-pointer" onClick={props.onClose} /> : null}
                             </div>
                         ) : null}
-                        <div className={getClassNames('dialog__body', 'p-2.5')}>
+                        <div className={getClassNames('dialog__body', 'grow p-2.5 overflow-y-auto')}>
                             {props.children}
                         </div>
-                        {props.actions ? <div className={getClassNames('dialog__actions', 'px-2.5')}>{ props.actions }</div> : null}
+                        {props.actions ? <div className={getClassNames('dialog__actions', 'shrink-0 px-2.5')}>{ props.actions }</div> : null}
                     </Card>
                 )}
             </Transition>

@@ -5,6 +5,8 @@ import { DocDetail } from '@swai/types';
 import { pick } from 'lodash';
 import { AppDataSource } from '@/common/database';
 import { DocLiked } from '@/entity/DocLIked';
+import { CommentRepository } from '@/utils/CommentRepository';
+import { CommentType } from '@/entity/ContentComment';
 
 interface GetDocDetailControllerParams {
     id: number;
@@ -30,11 +32,15 @@ class GetDocDetailController
         }
 
         const docLikedRepo = AppDataSource.getRepository(DocLiked);
-        const count = await docLikedRepo.count({
-            where: { docId: id }
-        });
+        const [likedCount, commentCount] = await Promise.all([
+            docLikedRepo.count({
+                where: { docId: id }
+            }),
+            CommentRepository.getContentCommentCount(CommentType.DOC, id),
+        ]);
 
-        data.likes_count += count;
+        data.likes_count += likedCount;
+        data.comment_count = commentCount;
         const result: any = pick(data, [
             'id',
             'slug',
@@ -45,6 +51,7 @@ class GetDocDetailController
             'likes_count',
             'read_count',
             'word_count',
+            'comment_count',
             'created_at',
             'updated_at',
             'body_html',
