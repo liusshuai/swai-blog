@@ -18,6 +18,12 @@ export abstract class BaseComment {
     @Column('text')
     content!: string;
 
+    @Column({
+        comment: '是否被删除',
+        default: false,
+    })
+    is_deleted!: boolean;
+
     @CreateDateColumn()
     create_at!: Date;
 

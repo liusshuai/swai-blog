@@ -4,30 +4,76 @@ import CommentInput from './CommentInput';
 import { Comment, CommentReply } from '@swai/types';
 import { createDiceBearAvatar } from '@/utils/diceBearAvatar';
 import { formatTime } from '@/utils/formatTime';
-import { CommentIcon } from '@swai/icon';
+import { CommentIcon, DeleteIcon } from '@swai/icon';
 import { CommentContext } from './CommentContext';
+import { observer } from 'mobx-react-lite';
+import touristStore from '@/store/touristStore';
+import { Dialog } from '@swai/ui';
+import { removeComment, removeReply } from 'api/comment/removeComment';
 
 interface CommentItemProps {
     mainId: number;
     comment: Comment | CommentReply;
     children?: React.ReactNode;
+
+    onRemove?: (comment: Comment | CommentReply) => void;
 }
 
-export default function(props: CommentItemProps) {
-    const { onReplySend } = useContext(CommentContext);
+const CommentItem = observer((props: CommentItemProps & { store: typeof touristStore }) => {
+    const { onReplySend, onCommentRemove, onReplyRemove } = useContext(CommentContext);
 
-    const { mainId, comment } = props;
+    const { mainId, comment, store } = props;
 
     const [showReply, setShowReply] = useState(false);
+    const [showRemoveDialog, setShowRemoveDialog] = useState(false);
 
     const fromProfile = useMemo(() => comment.from, [comment]);
     const toProfile = useMemo(() => (comment as CommentReply).to, [comment]);
+    const isFromMe = useMemo(() => {
+        return comment.from.id === store.state.profile?.id;
+    }, [comment.from, store.state.profile]);
 
     function onReply(content: string, done: () => void, onError: () => void) {
         onReplySend(mainId, comment.from.id, content, () => {
             setShowReply(false);
             done();
         }, onError);
+    }
+
+    function renderNickname(nickname: string, fromId: string) {
+        const isFromMe = fromId === store.state.profile?.id;
+        if (!isFromMe) {
+            return nickname;
+        } else {
+            return <>
+                { nickname }
+                <span className='inline-block ms-1.5 w-5 h-5 text-white text-xs text-center rounded-[2px] bg-primary'>我</span>
+            </>
+        }
+    }
+
+    function onRemove() {
+        setShowRemoveDialog(true);
+    }
+
+    function onRemoveConfirm() {
+        if (toProfile) {
+            // 删除回复
+            removeReply(comment.id)
+                .then(() => {
+                    onReplyRemove(mainId, comment.id);
+                    setShowRemoveDialog(false);
+                    props.onRemove && props.onRemove(comment);
+                });
+        } else {
+            // 删除评论
+            removeComment(comment.id)
+                .then(() => {
+                    onCommentRemove(comment as Comment);
+                    setShowRemoveDialog(false);
+                    props.onRemove && props.onRemove(comment);
+                });
+        }
     }
 
     return <div className='flex gap-4 py-2.5'> 
@@ -38,24 +84,35 @@ export default function(props: CommentItemProps) {
             <div className='group/reply'>
                 <div className='text-secondary mb-2 dark:text-secondary-dark'>
                     <span>
-                        { fromProfile.nickname }
-                        { toProfile ? <><span className='mx-2 text-primary dark:text-primary-dark'>回复</span> { toProfile.nickname }</> : null }
+                        { renderNickname(fromProfile.nickname, fromProfile.id) }
+                        { toProfile ? <><span className='mx-2 text-primary dark:text-primary-dark'>回复</span> { renderNickname(toProfile.nickname, toProfile.id) }</> : null }
                     </span>
                     <span className='text-helper ms-2 dark:text-helper-dark'>{ formatTime(comment.create_at) }</span>
                 </div>
                 <pre className='whitespace-pre-wrap leading-7 dark:text-primary-dark'>
                     {comment.content}
                 </pre>
-                <div className='mt-2'>
-                    <button className='text-xs text-secondary dark:text-secondary-dark' onClick={() => setShowReply(!showReply)}>
-                        { showReply ? '取消回复' : <span className='inline-flex items-center hover:text-brand'>
-                            <CommentIcon size={16} className='me-2' /> 回复
-                        </span> }
+                <div className='mt-2 flex items-center text-xs text-secondary dark:text-secondary-dark'>
+                    <button className='inline-flex items-center hover:text-brand me-5' onClick={() => setShowReply(!showReply)}>
+                        <CommentIcon size={16} className='me-2' /> { showReply ? '取消回复' : '回复' }
                     </button>
+                    {isFromMe ? <button className='group-hover/reply:inline-flex hidden items-center hover:text-primary' onClick={onRemove}>
+                        <DeleteIcon size={14} className='me-2' /> 删除
+                    </button> : null}
                 </div>
             </div>
             { showReply ? <CommentInput className='mt-2' placeholder={`回复 ${fromProfile.nickname}`} onSend={onReply} /> : null }
             { props.children ? <div className='mt-2.5'>{ props.children }</div> : null }
         </div>
+
+        <Dialog.Confirm
+            open={showRemoveDialog}
+            onClose={() => setShowRemoveDialog(false)}
+            onConfirm={onRemoveConfirm}
+        >
+            是否删除该条回复？
+        </Dialog.Confirm>
     </div>
-}
+});
+
+export default (props: CommentItemProps) => <CommentItem store={touristStore} {...props} />

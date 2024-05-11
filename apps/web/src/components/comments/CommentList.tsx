@@ -34,6 +34,14 @@ export default function() {
         }
     }
 
+    function onReplyRemove(reply: Comment | CommentReply) {
+        const index = curCommentAllReplies.findIndex(r => r.id === reply.id);
+        if (index > -1) {
+            curCommentAllReplies.splice(index, 1);
+            setCurCommentAllReplies([...curCommentAllReplies]);
+        }
+    }
+
     return <div className='mt-5'>
         {comments.map(comment => <CommentItem mainId={comment.id} comment={comment} key={comment.id}>
             {comment ? <>
@@ -57,7 +65,12 @@ export default function() {
                     direction: isMobile ? 'right' : undefined,
                     width: isMobile ? undefined : '600px'
                 }, <>
-                    {curComment && (curCommentAllReplies || []).map(reply => <CommentItem mainId={curComment!.id} comment={reply} key={reply.id} />)}
+                    {curComment && (curCommentAllReplies || []).map(reply => <CommentItem
+                            mainId={curComment!.id}
+                            comment={reply}
+                            key={reply.id}
+                            onRemove={onReplyRemove}
+                        />)}
                 </>
             )
         }

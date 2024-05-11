@@ -16,6 +16,7 @@ export interface DialogProps extends ComponentContext {
     showClose?: boolean;
     actions?: React.ReactNode;
     closeOnClickOverlay?: boolean;
+    children?: React.ReactNode | string;
 
     onClose?: () => void;
 }

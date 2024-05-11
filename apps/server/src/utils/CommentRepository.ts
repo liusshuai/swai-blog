@@ -2,6 +2,7 @@ import { AppDataSource } from "@/common/database";
 import { CommentReply } from "@/entity/CommentReply";
 import { CommentType, ContentComment } from "@/entity/ContentComment";
 import { Tourist } from "@/entity/Tourist";
+import type { Repository } from "typeorm";
 
 export interface AddCommentPayload {
     fromId: string;
@@ -57,6 +58,8 @@ export class CommentRepository {
             where: {
                 type,
                 contentId,
+                visible: true,
+                is_deleted: false,
             },
             take: pageSize,
             skip: (page - 1) * pageSize,
@@ -70,6 +73,7 @@ export class CommentRepository {
                 .createQueryBuilder('reply')
                 .where('reply.comment_id = :commentId', { commentId: comment.id })
                 .andWhere('reply.visible = 1')
+                .andWhere('reply.is_deleted = 0')
                 .leftJoinAndSelect('reply.from', 'from')
                 .leftJoinAndSelect('reply.to', 'to')
                 .take(2)
@@ -79,6 +83,7 @@ export class CommentRepository {
                 .createQueryBuilder('reply')
                 .where('reply.comment_id = :commentId', { commentId: comment.id })
                 .andWhere('reply.visible = 1')
+                .andWhere('reply.is_deleted = 0')
                 .getCount();
 
             comment.replies = replies;
@@ -135,6 +140,7 @@ export class CommentRepository {
             .createQueryBuilder('reply')
             .where('reply.comment_id = :commentId', { commentId })
             .andWhere('reply.visible = 1')
+            .andWhere('reply.is_deleted = 0')
             .leftJoinAndSelect('reply.from', 'from')
             .leftJoinAndSelect('reply.to', 'to')
             .orderBy('reply.create_at', 'DESC')
@@ -147,14 +153,41 @@ export class CommentRepository {
             .select('comment.id', 'commentId')
             .addSelect('COUNT(DISTINCT reply.id)', 'replyCount')
             .from(ContentComment, 'comment')
-            .leftJoin('comment.replies', 'reply')
+            .leftJoin('comment.replies', 'reply', 'reply.visible = 1 AND reply.is_deleted = 0')
             .where('comment.contentId = :contentId', { contentId })
             .andWhere('comment.type = :type', { type })
+            .andWhere('comment.visible = 1')
+            .andWhere('comment.is_deleted = 0')
             .groupBy('comment.id')
             .getRawMany();
-
+ 
         const total: number = result.reduce((sum, { replyCount }) => sum += parseInt(replyCount, 10), result.length);
 
         return total;
+    }
+
+    private static async doCommentRemove(repo: Repository<ContentComment | CommentReply>, id: number, vuid: string) {
+        const row = await repo.findOneBy({ id });
+
+        if (!row) {
+            throw new Error(`can not find comment form id: ${id}`);
+        }
+
+        if (row.from.id !== vuid) {
+            throw new Error(`no permission`);
+        }
+
+        row.is_deleted = true;
+        row.visible = false;
+
+        await repo.save(row);
+    }
+
+    static async removeComment(commentId: number, vuid: string) {
+        await this.doCommentRemove(this.commentRepo, commentId, vuid);
+    }
+
+    static async removeReply(replyId: number, vuid: string) {
+        await this.doCommentRemove(this.replyRepo, replyId, vuid);
     }
 }

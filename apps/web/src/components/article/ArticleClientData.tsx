@@ -68,10 +68,32 @@ export default function({ detail }: { detail: DocDetail }) {
         });
     }
 
+    function onCommentRemove(comment: Comment) {
+        getComments();
+        setCommentCount(commentCount - (comment.replyCount + 1));
+    }
+
+    function onReplyRemove(mainId: number, replyId: number) {
+        const commentIndex = comments.findIndex(c => c.id === mainId);
+        const comment = comments[commentIndex];
+        if (comment && comment.replies.length > 0) {
+            const replyIndex = comment.replies.findIndex(r => r.id = replyId);
+            if (replyIndex > -1) {
+                comment.replies.splice(replyIndex, 1);
+                comment.replyCount -= 1;
+                comments.splice(commentIndex, 1, comment);
+                setCommentCount(commentCount - 1);
+                setComments([...comments]);
+            }
+        }
+    }
+
     return <CommentContext.Provider value={{
         comments,
         onCommentSend,
         onReplySend,
+        onCommentRemove,
+        onReplyRemove,
     }}>
         {isMobile ? <BottomToolBar>
             <ArticleSocialData detail={detail} clickComment={() => setOpenComment(true)} />

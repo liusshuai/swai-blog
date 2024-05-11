@@ -16,3 +16,4 @@ export { default as CommentIcon } from './CommentIcon';
 export { default as SendIcon } from './SendIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as DoneAllIcon } from './DoneAllIcon';
+export { default as DeleteIcon } from './DeleteIcon';
