@@ -8,7 +8,7 @@ import { CommentIcon, DeleteIcon } from '@swai/icon';
 import { CommentContext } from './CommentContext';
 import { observer } from 'mobx-react-lite';
 import touristStore from '@/store/touristStore';
-import { Dialog } from '@swai/ui';
+import { openConfirmDialog } from '@swai/ui';
 import { removeComment, removeReply } from 'api/comment/removeComment';
 
 interface CommentItemProps {
@@ -23,9 +23,8 @@ const CommentItem = observer((props: CommentItemProps & { store: typeof touristS
     const { onReplySend, onCommentRemove, onReplyRemove } = useContext(CommentContext);
 
     const { mainId, comment, store } = props;
-
+    
     const [showReply, setShowReply] = useState(false);
-    const [showRemoveDialog, setShowRemoveDialog] = useState(false);
 
     const fromProfile = useMemo(() => comment.from, [comment]);
     const toProfile = useMemo(() => (comment as CommentReply).to, [comment]);
@@ -53,25 +52,31 @@ const CommentItem = observer((props: CommentItemProps & { store: typeof touristS
     }
 
     function onRemove() {
-        setShowRemoveDialog(true);
+        openConfirmDialog({
+            children: '是否删除该条回复？',
+            onCancel: (done) => {
+                done();
+            },
+            onConfirm: onRemoveConfirm,
+        });
     }
 
-    function onRemoveConfirm() {
+    function onRemoveConfirm(done: () => void) {
         if (toProfile) {
             // 删除回复
-            removeReply(comment.id)
+            return removeReply(comment.id)
                 .then(() => {
                     onReplyRemove(mainId, comment.id);
-                    setShowRemoveDialog(false);
                     props.onRemove && props.onRemove(comment);
+                    done();
                 });
         } else {
             // 删除评论
-            removeComment(comment.id)
+            return removeComment(comment.id)
                 .then(() => {
                     onCommentRemove(comment as Comment);
-                    setShowRemoveDialog(false);
                     props.onRemove && props.onRemove(comment);
+                    done();
                 });
         }
     }
@@ -96,7 +101,7 @@ const CommentItem = observer((props: CommentItemProps & { store: typeof touristS
                     <button className='inline-flex items-center hover:text-brand me-5' onClick={() => setShowReply(!showReply)}>
                         <CommentIcon size={16} className='me-2' /> { showReply ? '取消回复' : '回复' }
                     </button>
-                    {isFromMe ? <button className='group-hover/reply:inline-flex hidden items-center hover:text-primary' onClick={onRemove}>
+                    {isFromMe ? <button className='inline-flex tablet:group-hover/reply:inline-flex tablet:hidden items-center hover:text-primary hover:dark:text-primary-dark' onClick={onRemove}>
                         <DeleteIcon size={14} className='me-2' /> 删除
                     </button> : null}
                 </div>
@@ -104,14 +109,6 @@ const CommentItem = observer((props: CommentItemProps & { store: typeof touristS
             { showReply ? <CommentInput className='mt-2' placeholder={`回复 ${fromProfile.nickname}`} onSend={onReply} /> : null }
             { props.children ? <div className='mt-2.5'>{ props.children }</div> : null }
         </div>
-
-        <Dialog.Confirm
-            open={showRemoveDialog}
-            onClose={() => setShowRemoveDialog(false)}
-            onConfirm={onRemoveConfirm}
-        >
-            是否删除该条回复？
-        </Dialog.Confirm>
     </div>
 });
 

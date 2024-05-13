@@ -2,12 +2,13 @@
 import React, { useEffect } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
+import { FuncWithoutParams } from '../types/CommonUtils';
 
 export interface OverlayProps extends ComponentContext {
     opacity?: number;
     zIndex?: number;
 
-    onClick?: () => void;
+    onClick?: FuncWithoutParams;
 }
 
 const Overlay: React.FC<OverlayProps> = (props) => {

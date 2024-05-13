@@ -18,7 +18,7 @@ export default function ArticleSocialData(props: ArticleSocialDataProps) {
     const { detail, direction = 'row', clickComment } = props;
 
     const SocialItemClasses = useMemo(() => {
-        return `cursor-pointer flex items-center justify-center ${direction === 'col' ? 'flex-col py-3 border-b last:border-none' : 'w-1/3 gap-2.5'}`;
+        return `cursor-pointer flex items-center justify-center ${direction === 'col' ? 'flex-col py-3 border-b dark:border-dark last:border-none' : 'w-1/3 gap-2.5'}`;
     }, [direction]);
 
     return <div>

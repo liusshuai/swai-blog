@@ -8,6 +8,7 @@ import Card from "../Card";
 import { getClassNames } from "../utils/getClassNames";
 import { CloseIcon } from "@swai/icon";
 import Typography from "../Typography";
+import { FuncWithoutParams } from "../types/CommonUtils";
 
 export interface DialogProps extends ComponentContext {
     open: boolean;
@@ -18,7 +19,8 @@ export interface DialogProps extends ComponentContext {
     closeOnClickOverlay?: boolean;
     children?: React.ReactNode | string;
 
-    onClose?: () => void;
+    onClose?: FuncWithoutParams;
+    onAfterClose?: FuncWithoutParams;
 }
 
 const DURATION = 200;
@@ -69,6 +71,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
 
     function onExited() {
         setShow(false);
+        props.onAfterClose && props.onAfterClose();
     }
 
     return show
@@ -90,7 +93,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
                             ...defaultStyle,
                             ...transitionStyles[state],
                             width,
-                            minWidth: 400,
+                            minWidth: 300,
                         }}
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -108,10 +111,10 @@ const Dialog: React.FC<DialogProps> = (props) => {
                                 )}
                             >
                                 <Typography type="title">{props.title}</Typography>
-                                {showClose ? <CloseIcon size={20} className="cursor-pointer" onClick={props.onClose} /> : null}
+                                {showClose ? <CloseIcon size={20} className="cursor-pointer" onClick={() => props.onClose && props.onClose()} /> : null}
                             </div>
                         ) : null}
-                        <div className={getClassNames('dialog__body', 'grow p-2.5 overflow-y-auto')}>
+                        <div className={getClassNames('dialog__body', 'grow p-2.5 overflow-y-auto text-primary dark:text-primary-dark')}>
                             {props.children}
                         </div>
                         {props.actions ? <div className={getClassNames('dialog__actions', 'shrink-0 px-2.5')}>{ props.actions }</div> : null}

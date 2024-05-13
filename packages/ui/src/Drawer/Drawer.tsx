@@ -7,6 +7,7 @@ import Overlay from '../Overlay';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
 import Typography from '../Typography';
+import { FuncWithoutParams } from '../types/CommonUtils';
 
 export type DrawerDirection = 'left' | 'right' | 'bottom' | 'top';
 export interface DrawerProps extends ComponentContext {
@@ -18,7 +19,7 @@ export interface DrawerProps extends ComponentContext {
     closeOnClickOverlay?: boolean;
     actions?: React.ReactNode;
 
-    onClose?: () => void;
+    onClose?: FuncWithoutParams;
 }
 
 const DURATION = 250;

@@ -16,3 +16,4 @@ export { default as BottomToolBar } from './BottomToolBar';
 export { default as useAppTheme } from './utils/useAppTheme';
 export * from './utils/useAppTheme';
 export * from './utils/useMediaQuery';
+export * from './Dialog/openDialog';
