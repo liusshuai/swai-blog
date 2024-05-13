@@ -1,4 +1,4 @@
-import { createDiceBearAvatar } from "@/utils/diceBearAvatar";
+import { DEFAULT_TOURIST_AVATAR, createDiceBearAvatar } from "@/utils/diceBearAvatar";
 import { get } from "@/utils/request";
 import { TouristProfile } from "@swai/types";
 import { computed, observable, runInAction } from "mobx";
@@ -23,7 +23,7 @@ function useTouristStore() {
             return createDiceBearAvatar(avatar_style, avatar_search);
         }
 
-        return '';
+        return DEFAULT_TOURIST_AVATAR;
     });
 
     function setEditDialogVisible(visible: boolean) {

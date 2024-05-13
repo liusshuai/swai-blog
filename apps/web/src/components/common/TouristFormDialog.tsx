@@ -203,6 +203,9 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
                     onInvalid={onFiledInvalid('nickname')}
                     label="头像样式"
                     required
+                    helpText={<>
+                        头像使用DiceBear，使用参考<a className='text-link dark:text-link-dark' href="https://www.dicebear.com/how-to-use/http-api/" target='_blank'>点击查阅</a>
+                    </>}
                 >
                     <Input
                         value={formData.styleName}
@@ -215,6 +218,9 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
                     error={formError.nickname}
                     onInvalid={onFiledInvalid('nickname')}
                     label="头像定制参数"
+                    helpText={<>
+                        头像定制参数可参考<a className='text-link dark:text-link-dark' href="https://www.dicebear.com/how-to-use/http-api/#options" target='_blank'>点击查阅</a>
+                    </>}
                 >
                     <Input
                         value={formData.search}

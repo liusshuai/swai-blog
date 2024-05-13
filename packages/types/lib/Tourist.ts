@@ -5,6 +5,7 @@ export interface TouristProfile {
     website?: string;
     avatar_style: string;
     avatar_search?: string;
+    un_followed?: boolean;
 }
 
 export interface TouristEntity extends TouristProfile {

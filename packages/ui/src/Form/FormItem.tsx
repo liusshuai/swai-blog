@@ -8,7 +8,7 @@ export interface FormItemProps extends ComponentContext, FormLabelProps {
     required?: boolean;
     pattern?: string;
     error?: string;
-    helpText?: string;
+    helpText?: string | React.ReactNode;
     label?: string | React.ReactNode;
     onInvalid?: (e: FormEvent) => void;
 }
@@ -31,7 +31,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     }, [className, _labelPosition, label]);
 
     const labelClasses = useMemo(() => {
-        return getClassNames("form-item__label", 'text-secondary dark:text-secondary-dark', {
+        return getClassNames("form-item__label", 'shrink-0 text-secondary dark:text-secondary-dark', {
             'text-right': label && _labelPosition === 'start' && _labelAlign === 'right',
         });
     }, [label, _labelPosition, _labelAlign]);

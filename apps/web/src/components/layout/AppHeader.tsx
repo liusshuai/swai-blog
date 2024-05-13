@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { APP_THEME, Switch, useAppTheme } from '@swai/ui';
+import { APP_THEME, Switch, useAppTheme, useMobileMediaQuery } from '@swai/ui';
 import { CloseIcon, MenuIcon, SearchIcon } from '@swai/icon';
 import AppLogo from './AppLogo';
 import AppNavs from './AppNavs';
@@ -13,6 +13,8 @@ import TouristFormDialog from '../common/TouristFormDialog';
 
 export default function AppHeader() {
     const pathname = usePathname();
+
+    const isMobile = useMobileMediaQuery();
     const { theme, updateTheme } = useAppTheme();
 
     function onModeChange(value: boolean) {
@@ -33,7 +35,7 @@ export default function AppHeader() {
                 <span role="button" className="tablet:hidden" onClick={() => setOpenSearch(!openSearch)}>
                     {openSearch ? <CloseIcon /> : <SearchIcon />}
                 </span>
-                <div className="mobile:hidden flex items-center">
+                {isMobile ? null : <div className="flex items-center">
                     <AppNavs />
                     <AppSearchBar />
                     <Switch
@@ -44,7 +46,7 @@ export default function AppHeader() {
                         onChange={onModeChange}
                     />
                     <TouristAvatar />
-                </div>
+                </div>}
             </div>
             {openSearch ? (
                 <div className="bg-[#282B33] sticky top-nav py-2 px-4 z-nav tablet:hidden">
@@ -52,7 +54,7 @@ export default function AppHeader() {
                 </div>
             ) : null}
 
-            <Drawer className="tablet:hidden" open={openMenu} title={<span></span>} onClose={() => setOpenMenu(false)}>
+            <Drawer open={openMenu && isMobile} title={<span></span>} onClose={() => setOpenMenu(false)}>
                 <MobileSide />
             </Drawer>
 

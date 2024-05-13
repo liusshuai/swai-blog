@@ -41,18 +41,18 @@ const CommentInput = observer((props: CommentInputProps & { store: typeof touris
             disabled={!Boolean(props.store.state.profile)}
             maxLength={1000}
             value={content}
-            placeholder={props.placeholder || '平等的我平等的你，平等的我们，请礼貌发言...'}
+            placeholder={props.placeholder || props.store.state.profile ? '平等的我平等的你，平等的我们，请礼貌发言...' : '请点击上方头像进行信息补充'}
             rows={2}
             prepend={<div className='inline-flex items-center'>
                 <TouristAvatar />
-                <span>{ props.store.state.profile?.nickname || '点击编辑信息' }</span>
+                <span className='ms-1.5'>{ props.store.state.profile?.nickname || '点击头像编辑信息' }</span>
             </div>}
             append={
                 <div className='flex items-center justify-between'>
                     <div>
                         {/* 表情包预留 */}
                     </div>
-                    <Button loading={sending} onClick={onSend}>发送</Button>
+                    <Button disabled={!Boolean(props.store.state.profile)} loading={sending} onClick={onSend}>发送</Button>
                 </div>
             }
             onInput={onInput}

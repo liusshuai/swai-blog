@@ -32,6 +32,14 @@ const CommentItem = observer((props: CommentItemProps & { store: typeof touristS
         return comment.from.id === store.state.profile?.id;
     }, [comment.from, store.state.profile]);
 
+    function onReplyClick() {
+        if (store.state.profile) {
+            setShowReply(!showReply);
+        } else {
+            store.setEditDialogVisible(true);
+        }
+    }
+
     function onReply(content: string, done: () => void, onError: () => void) {
         onReplySend(mainId, comment.from.id, content, () => {
             setShowReply(false);
@@ -98,7 +106,7 @@ const CommentItem = observer((props: CommentItemProps & { store: typeof touristS
                     {comment.content}
                 </pre>
                 <div className='mt-2 flex items-center text-xs text-secondary dark:text-secondary-dark'>
-                    <button className='inline-flex items-center hover:text-brand me-5' onClick={() => setShowReply(!showReply)}>
+                    <button className='inline-flex items-center hover:text-brand me-5' onClick={onReplyClick}>
                         <CommentIcon size={16} className='me-2' /> { showReply ? '取消回复' : '回复' }
                     </button>
                     {isFromMe ? <button className='inline-flex tablet:group-hover/reply:inline-flex tablet:hidden items-center hover:text-primary hover:dark:text-primary-dark' onClick={onRemove}>
