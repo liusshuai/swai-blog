@@ -1,8 +1,8 @@
-import { AppDataSource } from "@/common/database";
-import { CommentReply } from "@/entity/CommentReply";
-import { CommentType, ContentComment } from "@/entity/ContentComment";
-import { Tourist } from "@/entity/Tourist";
-import type { Repository } from "typeorm";
+import { AppDataSource } from '@/common/database';
+import { CommentReply } from '@/entity/CommentReply';
+import { CommentType, ContentComment } from '@/entity/ContentComment';
+import { Tourist } from '@/entity/Tourist';
+import type { Repository } from 'typeorm';
 
 export interface AddCommentPayload {
     fromId: string;
@@ -17,7 +17,6 @@ export interface GetCommentsPayload {
 }
 
 export class CommentRepository {
-
     static touristRepo = AppDataSource.getRepository(Tourist);
     static commentRepo = AppDataSource.getRepository(ContentComment);
     static replyRepo = AppDataSource.getRepository(CommentReply);
@@ -35,7 +34,7 @@ export class CommentRepository {
         const { fromId, content, contentId } = payload;
 
         const tourist = await this.getTourist(fromId);
-        
+
         const comment = new ContentComment();
         comment.type = type;
         comment.from = tourist;
@@ -114,8 +113,8 @@ export class CommentRepository {
     static async addReply(commentId: number, payload: { content: string; from: string; to: string }) {
         const fromTourist = await this.getTourist(payload.from);
         const toTourist = await this.getTourist(payload.to);
-        
-        const comment = await this.commentRepo.findOneBy({ 
+
+        const comment = await this.commentRepo.findOneBy({
             id: commentId,
         });
 
@@ -148,8 +147,7 @@ export class CommentRepository {
     }
 
     static async getContentCommentCount(type: CommentType, contentId: number): Promise<number> {
-        const result = await AppDataSource
-            .createQueryBuilder()
+        const result = await AppDataSource.createQueryBuilder()
             .select('comment.id', 'commentId')
             .addSelect('COUNT(DISTINCT reply.id)', 'replyCount')
             .from(ContentComment, 'comment')
@@ -160,8 +158,8 @@ export class CommentRepository {
             .andWhere('comment.is_deleted = 0')
             .groupBy('comment.id')
             .getRawMany();
- 
-        const total: number = result.reduce((sum, { replyCount }) => sum += parseInt(replyCount, 10), result.length);
+
+        const total: number = result.reduce((sum, { replyCount }) => (sum += parseInt(replyCount, 10)), result.length);
 
         return total;
     }

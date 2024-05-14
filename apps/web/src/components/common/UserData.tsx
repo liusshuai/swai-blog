@@ -7,18 +7,14 @@ import rootStore from '../../store/rootStore';
 import touristStore from '../../store/touristStore';
 import { DoneAllIcon, RssIcon } from '@swai/icon';
 
-const UserDataOb = observer(({ store, tStore }: { store: typeof rootStore; tStore: typeof touristStore; }) => {
-
+const UserDataOb = observer(({ store, tStore }: { store: typeof rootStore; tStore: typeof touristStore }) => {
     const isFollowed = useMemo(() => {
         if (tStore.state.profile) {
             return !tStore.state.profile.un_followed;
         }
 
         return false;
-    }, [
-        tStore.state.profile,
-        tStore.state.profile?.un_followed,
-    ]);
+    }, [tStore.state.profile, tStore.state.profile?.un_followed]);
 
     function onFollow() {
         if (isFollowed) {
@@ -52,7 +48,7 @@ const UserDataOb = observer(({ store, tStore }: { store: typeof rootStore; tStor
                 icon={isFollowed ? <DoneAllIcon size={20} /> : <RssIcon size={20} />}
                 onClick={onFollow}
             >
-                {isFollowed ? '取消订阅' : '订阅我' }
+                {isFollowed ? '取消订阅' : '订阅我'}
             </Button>
             <div className="grid grid-cols-3 py-4 border-t border-b dark:border-divider-dark">
                 <div className="text-center">

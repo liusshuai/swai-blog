@@ -9,10 +9,15 @@ import './common/database';
 const app = new Koa();
 
 app.keys = ['lsshuaisl', 'liushuai', 'cameron monaghan'];
-app.use(session({
-    key: app.keys[0],
-    maxAge: 86400000,
-}, app));
+app.use(
+    session(
+        {
+            key: app.keys[0],
+            maxAge: 86400000,
+        },
+        app,
+    ),
+);
 
 app.use(
     cors({

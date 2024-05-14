@@ -5,7 +5,6 @@ import svgCaptcha from 'svg-captcha';
 @RouteController()
 class GetController implements AsyncRouteController<void, string> {
     async execute(params: void, ctx: Context): Promise<RouteControllerResult<string>> {
-        
         const captcha = svgCaptcha.create({
             color: true,
             width: 120,

@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import { get } from '@/utils/request';
 import React, { useEffect, useState } from 'react';
 
-export default function() {
+export default function () {
     const [svg, setSvg] = useState<string>('');
 
     useEffect(() => {
@@ -11,7 +11,7 @@ export default function() {
 
         return () => {
             setSvg('');
-        }
+        };
     }, []);
 
     function getCaptcha() {
@@ -20,5 +20,5 @@ export default function() {
         });
     }
 
-    return <div dangerouslySetInnerHTML={{ __html: svg }}></div>
+    return <div dangerouslySetInnerHTML={{ __html: svg }}></div>;
 }

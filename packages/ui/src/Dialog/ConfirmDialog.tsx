@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import type { DialogProps } from './Dialog';
@@ -14,8 +14,15 @@ export interface ConfirmDialogProps extends Omit<DialogProps, 'actions'> {
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
-
-    const { title = '提示', cancelText = '取消', confirmText = '确定', children, onCancel, onConfirm, ...extraProps } = props;
+    const {
+        title = '提示',
+        cancelText = '取消',
+        confirmText = '确定',
+        children,
+        onCancel,
+        onConfirm,
+        ...extraProps
+    } = props;
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -34,15 +41,25 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     const doCancel = () => doLikePromise(onCancel as FuncWithoutParams<void | Promise<any>>);
     const doConfirm = () => doLikePromise(onConfirm as FuncWithoutParams<void | Promise<any>>);
 
-    return <Dialog {...extraProps} title={title} actions={
-        <div className="flex justify-center gap-5 mt-5">
-            <Button size='medium' disabled={loading} color='secondary' onClick={doCancel}>{ cancelText }</Button>
-            <Button size='medium' loading={loading} onClick={doConfirm}>{ confirmText }</Button>
-        </div>
-    }>
-        { children }
-    </Dialog>
-}
+    return (
+        <Dialog
+            {...extraProps}
+            title={title}
+            actions={
+                <div className="flex justify-center gap-5 mt-5">
+                    <Button size="medium" disabled={loading} color="secondary" onClick={doCancel}>
+                        {cancelText}
+                    </Button>
+                    <Button size="medium" loading={loading} onClick={doConfirm}>
+                        {confirmText}
+                    </Button>
+                </div>
+            }
+        >
+            {children}
+        </Dialog>
+    );
+};
 
 ConfirmDialog.displayName = 'ConfirmDialog';
 export default ConfirmDialog;

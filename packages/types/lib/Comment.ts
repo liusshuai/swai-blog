@@ -1,10 +1,10 @@
-import { TouristProfile } from "./Tourist";
+import { TouristProfile } from './Tourist';
 
 export enum CommentType {
     DOC = 'doc',
     NOTE = 'note',
     BOADR = 'board',
-};
+}
 
 export interface Comment {
     id: number;

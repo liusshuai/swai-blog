@@ -17,11 +17,10 @@ interface RegisterControllerParams {
 }
 
 @RouteController({
-    methods: 'post'
+    methods: 'post',
 })
 class RegisterController implements AsyncRouteController<RegisterControllerParams, TouristProfile> {
     async execute(params: RegisterControllerParams, ctx: Context): Promise<RouteControllerResult<TouristProfile>> {
-        
         if (params.verifyCode !== '1234') {
             throw new Error('邮箱验证码已过期或错误，请稍后重试');
         }
@@ -30,7 +29,7 @@ class RegisterController implements AsyncRouteController<RegisterControllerParam
         const tourist = await touristRepo.findOneBy({
             email: params.email,
         });
-        
+
         if (tourist) {
             throw new Error('当前邮箱已被使用');
         }
@@ -52,7 +51,7 @@ class RegisterController implements AsyncRouteController<RegisterControllerParam
         ctx.cookies.set(TOURIST_LAST_VISIT_TOKEN_KEY, newTourist.last_visit_token, {
             httpOnly: true,
             // secure: true, // if https
-        })
+        });
 
         return new RouteControllerResult(omit(newTourist, ['last_visit_token']));
     }

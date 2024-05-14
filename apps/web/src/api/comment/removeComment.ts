@@ -1,4 +1,4 @@
-import { post } from "@/utils/request";
+import { post } from '@/utils/request';
 
 export function removeComment(comment_id: number) {
     return post('/api/v1/comment/remove', { comment_id });

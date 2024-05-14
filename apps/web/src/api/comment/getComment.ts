@@ -1,5 +1,5 @@
-import { get } from "@/utils/request";
-import { Comment, CommentReply } from "@swai/types";
+import { get } from '@/utils/request';
+import { Comment, CommentReply } from '@swai/types';
 
 export interface GetDocCommentsParams {
     docId: number;

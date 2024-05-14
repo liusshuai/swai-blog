@@ -1,40 +1,40 @@
 {
-  "name": "@swai/ui",
-  "version": "1.0.0",
-  "description": "",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "lib",
-    "tailwind.config.js",
-    "style.css"
-  ],
-  "scripts": {
-    "serve": "less ./src/index.less ./lib/index.css -w & tsc -b -w",
-    "build": "rm -rf lib && tsc -b",
-    "build:style": "lessc ./src/index.less ./lib/index.css"
-  },
-  "keywords": [],
-  "author": "LSSHUAI",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.25",
-    "@types/react-transition-group": "^4.4.10",
-    "less": "^4.2.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "peerDependencies": {
-    "autoprefixer": "^10.4.18",
-    "postcss": "^8.4.35",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tailwindcss": "^3.4.1"
-  },
-  "dependencies": {
-    "@swai/icon": "workspace:^",
-    "classnames": "^2.5.1",
-    "react-transition-group": "^4.4.5"
-  }
+    "name": "@swai/ui",
+    "version": "1.0.0",
+    "description": "",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "files": [
+        "lib",
+        "tailwind.config.js",
+        "style.css"
+    ],
+    "scripts": {
+        "serve": "less ./src/index.less ./lib/index.css -w & tsc -b -w",
+        "build": "rm -rf lib && tsc -b",
+        "build:style": "lessc ./src/index.less ./lib/index.css"
+    },
+    "keywords": [],
+    "author": "LSSHUAI",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/react": "^18.2.64",
+        "@types/react-dom": "^18.2.25",
+        "@types/react-transition-group": "^4.4.10",
+        "less": "^4.2.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "peerDependencies": {
+        "autoprefixer": "^10.4.18",
+        "postcss": "^8.4.35",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "tailwindcss": "^3.4.1"
+    },
+    "dependencies": {
+        "@swai/icon": "workspace:^",
+        "classnames": "^2.5.1",
+        "react-transition-group": "^4.4.5"
+    }
 }

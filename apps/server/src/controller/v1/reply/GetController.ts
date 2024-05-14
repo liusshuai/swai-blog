@@ -19,10 +19,10 @@ class GetController implements AsyncRouteController<GetControllerParams, GetCont
         const { comment_id } = params;
 
         const [replies, count] = await CommentRepository.getReplies(comment_id);
-        
+
         return new RouteControllerResult({
             replies,
-            count
+            count,
         });
     }
 }

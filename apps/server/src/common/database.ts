@@ -15,8 +15,10 @@ export const AppDataSource = new DataSource({
     synchronize: true,
 });
 
-AppDataSource.initialize().then(() => {
-    console.log('sql connect success');
-}).catch((e) => {
-    console.log('sql connect error: ', e.message);
-});
+AppDataSource.initialize()
+    .then(() => {
+        console.log('sql connect success');
+    })
+    .catch((e) => {
+        console.log('sql connect error: ', e.message);
+    });

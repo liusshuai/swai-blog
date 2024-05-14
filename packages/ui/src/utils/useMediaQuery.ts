@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useLayoutEffect, useState } from "react"
+import { useLayoutEffect, useState } from 'react';
 
 export function useMediaQuery(query: string): boolean {
     const [matches, setMatches] = useState<boolean>(false);
@@ -12,7 +12,7 @@ export function useMediaQuery(query: string): boolean {
             setMatches(mql?.matches || false);
             const listener = (e: MediaQueryListEvent) => {
                 setMatches(e.matches);
-            }
+            };
 
             mql?.addEventListener('change', listener);
 
@@ -21,7 +21,7 @@ export function useMediaQuery(query: string): boolean {
                     mql.removeEventListener('change', listener);
                     mql = undefined;
                 }
-            }
+            };
         }
     }, [query]);
 

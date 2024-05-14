@@ -11,7 +11,7 @@ interface AddCommentControllerParams {
 }
 
 @RouteController({
-    methods: 'post'
+    methods: 'post',
 })
 class AddCommentController implements AsyncRouteController<AddCommentControllerParams, boolean> {
     @AssertParams('docId', 'content')
@@ -26,7 +26,6 @@ class AddCommentController implements AsyncRouteController<AddCommentControllerP
             contentId: docId,
             content,
         });
-        
 
         return new RouteControllerResult(true);
     }

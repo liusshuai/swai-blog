@@ -3,37 +3,31 @@ const plugin = require('tailwindcss/plugin');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: ['selector', '[data-theme="dark"]'],
-    presets: [
-        require('@swai/ui/tailwind.config'),
-    ],
-    content: [
-        './src/**/*.{ts,tsx}',
-        './node_modules/@swai/ui/lib/**/*.js'
-    ],
+    presets: [require('@swai/ui/tailwind.config')],
+    content: ['./src/**/*.{ts,tsx}', './node_modules/@swai/ui/lib/**/*.js'],
     theme: {
         extend: {
             width: {
                 layout: 'var(--layout-width)',
             },
             maxWidth: {
-                layout: 'var(--layout-width)'
+                layout: 'var(--layout-width)',
             },
             spacing: {
                 nav: 'var(--nav-height)',
-                container: 'var(--container-padding)'
+                container: 'var(--container-padding)',
             },
             backgroundColor: ({ theme }) => ({
                 page: {
                     DEFAULT: theme('colors.gray.100'),
                     dark: '#121212',
-                }
+                },
             }),
         },
     },
     plugins: [
         require('@tailwindcss/aspect-ratio'),
         plugin(function ({ addBase, addComponents, theme }) {
-
             addBase({
                 ':root': {
                     '--layout-width': '1200px',
@@ -45,7 +39,7 @@ module.exports = {
                         '--nav-height': '86px',
                         '--container-padding': '40px',
                     },
-                }
+                },
             });
 
             addComponents({
@@ -55,9 +49,8 @@ module.exports = {
                     marginRight: 'auto',
                     paddingLeft: theme('spacing.container'),
                     paddingRight: theme('spacing.container'),
-                }
+                },
             });
-
         }),
     ],
-}
+};

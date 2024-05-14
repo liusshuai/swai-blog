@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { LikeDarkIcon, LikeIcon } from '@swai/icon';
-import { post } from "@/utils/request";
-import { observer } from "mobx-react-lite";
-import touristStore from "@/store/touristStore";
+import { post } from '@/utils/request';
+import { observer } from 'mobx-react-lite';
+import touristStore from '@/store/touristStore';
 
 interface LikedDataRowProps {
     docId: number;
@@ -53,4 +53,4 @@ const LikedDataRow = observer((props: LikedDataRowProps & { store: typeof touris
     });
 });
 
-export default (props: LikedDataRowProps) => <LikedDataRow store={touristStore} {...props} />
+export default (props: LikedDataRowProps) => <LikedDataRow store={touristStore} {...props} />;

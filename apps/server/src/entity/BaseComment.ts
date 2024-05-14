@@ -1,5 +1,5 @@
-import { Column, CreateDateColumn, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Tourist } from "./Tourist";
+import { Column, CreateDateColumn, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Tourist } from './Tourist';
 
 export abstract class BaseComment {
     @PrimaryGeneratedColumn()

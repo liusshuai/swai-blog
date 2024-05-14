@@ -1,3 +1,3 @@
-import BottomToolBar from "./BottomToolBar";
+import BottomToolBar from './BottomToolBar';
 
 export default BottomToolBar;

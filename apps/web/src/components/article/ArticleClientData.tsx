@@ -1,18 +1,17 @@
-'use client'
+'use client';
 
-import { Comment, DocDetail } from "@swai/types";
-import { BottomToolBar, Card, Drawer, useMobileMediaQuery } from "@swai/ui";
-import { useContext, useEffect, useRef, useState } from "react";
-import CommentInput from "../comments/CommentInput";
-import CommentList from "../comments/CommentList";
-import { addCommentReply, addDocComment } from "api/comment/addComment";
-import { getDocComments } from "api/comment/getComment";
-import { CommentContext, SendCallback } from "../comments/CommentContext";
-import ArticleSocialData from "./ArticleSocialData";
-import { ArticleDataContext } from "./ArticleDetail";
+import { Comment, DocDetail } from '@swai/types';
+import { BottomToolBar, Card, Drawer, useMobileMediaQuery } from '@swai/ui';
+import { useContext, useEffect, useRef, useState } from 'react';
+import CommentInput from '../comments/CommentInput';
+import CommentList from '../comments/CommentList';
+import { addCommentReply, addDocComment } from 'api/comment/addComment';
+import { getDocComments } from 'api/comment/getComment';
+import { CommentContext, SendCallback } from '../comments/CommentContext';
+import ArticleSocialData from './ArticleSocialData';
+import { ArticleDataContext } from './ArticleDetail';
 
-export default function({ detail }: { detail: DocDetail }) {
-
+export default function ({ detail }: { detail: DocDetail }) {
     const isMobile = useMobileMediaQuery();
 
     const { commentCount, setCommentCount } = useContext(ArticleDataContext);
@@ -39,12 +38,14 @@ export default function({ detail }: { detail: DocDetail }) {
         addDocComment({
             docId: detail.id,
             content,
-        }).then(() => {
-            curPage.current = 1;
-            getComments();
-            setCommentCount(commentCount + 1);
-            done();
-        }).finally(onError);
+        })
+            .then(() => {
+                curPage.current = 1;
+                getComments();
+                setCommentCount(commentCount + 1);
+                done();
+            })
+            .finally(onError);
     }
 
     function onReplySend(mainId: number, toId: string, content: string, done: SendCallback, onError: SendCallback) {
@@ -52,20 +53,22 @@ export default function({ detail }: { detail: DocDetail }) {
             comment_id: mainId,
             content,
             to: toId,
-        }).then((reply) => {
-            const commentIndex = comments.findIndex(c => c.id === mainId);
-            const comment = comments[commentIndex];
-            if (comment) {
-                comment.replies.unshift(reply);
-                comments.splice(commentIndex, 1, comment);
-                setCommentCount(commentCount + 1);
-                setComments([...comments]);
-            }
-            done();
-        }).catch((e) => {
-            alert(e.message);
-            onError();
-        });
+        })
+            .then((reply) => {
+                const commentIndex = comments.findIndex((c) => c.id === mainId);
+                const comment = comments[commentIndex];
+                if (comment) {
+                    comment.replies.unshift(reply);
+                    comments.splice(commentIndex, 1, comment);
+                    setCommentCount(commentCount + 1);
+                    setComments([...comments]);
+                }
+                done();
+            })
+            .catch((e) => {
+                alert(e.message);
+                onError();
+            });
     }
 
     function onCommentRemove(comment: Comment) {
@@ -74,10 +77,10 @@ export default function({ detail }: { detail: DocDetail }) {
     }
 
     function onReplyRemove(mainId: number, replyId: number) {
-        const commentIndex = comments.findIndex(c => c.id === mainId);
+        const commentIndex = comments.findIndex((c) => c.id === mainId);
         const comment = comments[commentIndex];
         if (comment && comment.replies.length > 0) {
-            const replyIndex = comment.replies.findIndex(r => r.id = replyId);
+            const replyIndex = comment.replies.findIndex((r) => (r.id = replyId));
             if (replyIndex > -1) {
                 comment.replies.splice(replyIndex, 1);
                 comment.replyCount -= 1;
@@ -88,23 +91,36 @@ export default function({ detail }: { detail: DocDetail }) {
         }
     }
 
-    return <CommentContext.Provider value={{
-        comments,
-        onCommentSend,
-        onReplySend,
-        onCommentRemove,
-        onReplyRemove,
-    }}>
-        {isMobile ? <BottomToolBar>
-            <ArticleSocialData detail={detail} clickComment={() => setOpenComment(true)} />
-        </BottomToolBar> : <Card>
-            <CommentInput />
-            <CommentList />
-        </Card>}
+    return (
+        <CommentContext.Provider
+            value={{
+                comments,
+                onCommentSend,
+                onReplySend,
+                onCommentRemove,
+                onReplyRemove,
+            }}
+        >
+            {isMobile ? (
+                <BottomToolBar>
+                    <ArticleSocialData detail={detail} clickComment={() => setOpenComment(true)} />
+                </BottomToolBar>
+            ) : (
+                <Card>
+                    <CommentInput />
+                    <CommentList />
+                </Card>
+            )}
 
-        <Drawer title="评论" open={isMobile && openComment} direction="bottom" onClose={() => setOpenComment(false)}>
-            <CommentInput />
-            <CommentList />
-        </Drawer>
-    </CommentContext.Provider>
+            <Drawer
+                title="评论"
+                open={isMobile && openComment}
+                direction="bottom"
+                onClose={() => setOpenComment(false)}
+            >
+                <CommentInput />
+                <CommentList />
+            </Drawer>
+        </CommentContext.Provider>
+    );
 }

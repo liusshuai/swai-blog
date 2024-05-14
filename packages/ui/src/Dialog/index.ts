@@ -1,5 +1,5 @@
-import Dialog from "./Dialog";
-import ConfirmDialog from "./ConfirmDialog";
+import Dialog from './Dialog';
+import ConfirmDialog from './ConfirmDialog';
 
 (Dialog as any).Confirm = ConfirmDialog;
 

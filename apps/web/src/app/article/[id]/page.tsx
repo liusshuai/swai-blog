@@ -8,8 +8,10 @@ import Link from 'next/link';
 export default async function DocDetail({ params }: { params: { id: string } }) {
     const detail = await get<DocDetail>('/api/v1/doc/getDetail', { id: params.id });
 
-    return (
-         detail ? <ArticleDetail detail={detail} /> : <Empty
+    return detail ? (
+        <ArticleDetail detail={detail} />
+    ) : (
+        <Empty
             tip="文章不存在或未发布"
             actions={
                 <Link href={'/'}>

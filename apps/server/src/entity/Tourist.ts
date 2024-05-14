@@ -1,11 +1,11 @@
-import { TouristEntity } from "@swai/types";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { TouristEntity } from '@swai/types';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Tourist implements TouristEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
-    
+
     @Column({
         comment: '游客昵称',
         length: 50,

@@ -1,7 +1,7 @@
-import { DEFAULT_TOURIST_AVATAR, createDiceBearAvatar } from "@/utils/diceBearAvatar";
-import { get } from "@/utils/request";
-import { TouristProfile } from "@swai/types";
-import { computed, observable, runInAction } from "mobx";
+import { DEFAULT_TOURIST_AVATAR, createDiceBearAvatar } from '@/utils/diceBearAvatar';
+import { get } from '@/utils/request';
+import { TouristProfile } from '@swai/types';
+import { computed, observable, runInAction } from 'mobx';
 
 interface TouristStoreState {
     openEditDialog: boolean;
@@ -33,12 +33,11 @@ function useTouristStore() {
     }
 
     function getTouristLikedDocs() {
-        get<number[]>('/api/v1/tourist/getLikedDocIds')
-            .then((data) => {
-                runInAction(() => {
-                    state.likedDocs = data;
-                });
+        get<number[]>('/api/v1/tourist/getLikedDocIds').then((data) => {
+            runInAction(() => {
+                state.likedDocs = data;
             });
+        });
     }
 
     function likeDoc(docId: number) {
@@ -62,11 +61,10 @@ function useTouristStore() {
     }
 
     function getTouristProfile() {
-        get<TouristProfile>('/api/v1/tourist/getTouristInfo')
-            .then((data) => {
-                setTouristProfile(data);
-                getTouristLikedDocs();
-            });
+        get<TouristProfile>('/api/v1/tourist/getTouristInfo').then((data) => {
+            setTouristProfile(data);
+            getTouristLikedDocs();
+        });
     }
 
     function setTouristProfile(profile: TouristProfile) {

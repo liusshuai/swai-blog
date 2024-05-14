@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import Dialog, { DialogProps } from './Dialog';
@@ -17,7 +17,6 @@ export interface DialogOptions extends Omit<DialogProps, 'open' | 'onClose'>, Co
 
 let renderTimer: any;
 export function openDialog(options: DialogOptions | ConfirmDialogOptions) {
-
     const container = document.createDocumentFragment();
     document.body.append(container);
 
@@ -32,7 +31,7 @@ export function openDialog(options: DialogOptions | ConfirmDialogOptions) {
         mergedOptions.open = false;
         root.render(<Node {...mergedOptions} />);
     }
-    
+
     function onClose() {
         if (options.onBeforeClose) {
             options.onBeforeClose(doClose);
@@ -74,10 +73,9 @@ export function openDialog(options: DialogOptions | ConfirmDialogOptions) {
         renderTimer && clearTimeout(renderTimer);
 
         renderTimer = setTimeout(() => {
-
             if (isConfirm) {
                 mergedOptions.onCancel = onCancel;
-        
+
                 mergedOptions.onConfirm = onConfirm;
             }
 
@@ -88,7 +86,8 @@ export function openDialog(options: DialogOptions | ConfirmDialogOptions) {
     render();
 }
 
-export const openConfirmDialog = (options: ConfirmDialogOptions) => openDialog({
-    type: 'confirm',
-    ...options,
-});
+export const openConfirmDialog = (options: ConfirmDialogOptions) =>
+    openDialog({
+        type: 'confirm',
+        ...options,
+    });

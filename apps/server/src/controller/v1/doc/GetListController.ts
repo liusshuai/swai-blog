@@ -32,15 +32,21 @@ class GetDocListController implements AsyncRouteController<GetDocListControllerP
         const docIds = list.map((item) => item.id);
 
         const docLikedRepo = AppDataSource.getRepository(DocLiked);
-        const likedCounts = await Promise.all(docIds.map((id) => docLikedRepo.count({
-            where: { docId: id }
-        })));
+        const likedCounts = await Promise.all(
+            docIds.map((id) =>
+                docLikedRepo.count({
+                    where: { docId: id },
+                }),
+            ),
+        );
 
-        const commentCounts = await Promise.all(docIds.map((id) => CommentRepository.getContentCommentCount(CommentType.DOC, id)));
+        const commentCounts = await Promise.all(
+            docIds.map((id) => CommentRepository.getContentCommentCount(CommentType.DOC, id)),
+        );
 
         const result = list.map((doc, i) => {
-            doc.likes_count += (likedCounts[i] || 0);
-            doc.comment_count = (commentCounts[i] || 0);
+            doc.likes_count += likedCounts[i] || 0;
+            doc.comment_count = commentCounts[i] || 0;
 
             return pick(doc, [
                 'id',
@@ -58,7 +64,7 @@ class GetDocListController implements AsyncRouteController<GetDocListControllerP
                 'updated_at',
             ]);
         });
-        
+
         return new RouteControllerResult({
             page,
             list: result,

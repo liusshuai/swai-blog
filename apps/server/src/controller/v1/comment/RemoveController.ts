@@ -9,7 +9,7 @@ interface RemoveControllerParams {
 }
 
 @RouteController({
-    methods: 'post'
+    methods: 'post',
 })
 class RemoveController implements AsyncRouteController<RemoveControllerParams, boolean> {
     @AssertParams('comment_id')
@@ -20,7 +20,7 @@ class RemoveController implements AsyncRouteController<RemoveControllerParams, b
         const vuid = ctx.cookies.get(TOURIST_UUID_KEY)!;
 
         await CommentRepository.removeComment(comment_id, vuid);
-        
+
         return new RouteControllerResult(true);
     }
 }

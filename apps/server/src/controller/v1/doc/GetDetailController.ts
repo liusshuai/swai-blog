@@ -34,7 +34,7 @@ class GetDocDetailController
         const docLikedRepo = AppDataSource.getRepository(DocLiked);
         const [likedCount, commentCount] = await Promise.all([
             docLikedRepo.count({
-                where: { docId: id }
+                where: { docId: id },
             }),
             CommentRepository.getContentCommentCount(CommentType.DOC, id),
         ]);

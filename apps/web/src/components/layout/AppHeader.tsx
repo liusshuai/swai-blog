@@ -35,18 +35,20 @@ export default function AppHeader() {
                 <span role="button" className="tablet:hidden" onClick={() => setOpenSearch(!openSearch)}>
                     {openSearch ? <CloseIcon /> : <SearchIcon />}
                 </span>
-                {isMobile ? null : <div className="flex items-center">
-                    <AppNavs />
-                    <AppSearchBar />
-                    <Switch
-                        className="mx-5"
-                        value={theme === APP_THEME.Dark}
-                        activeText="浅色"
-                        inactiveText="深色"
-                        onChange={onModeChange}
-                    />
-                    <TouristAvatar />
-                </div>}
+                {isMobile ? null : (
+                    <div className="flex items-center">
+                        <AppNavs />
+                        <AppSearchBar />
+                        <Switch
+                            className="mx-5"
+                            value={theme === APP_THEME.Dark}
+                            activeText="浅色"
+                            inactiveText="深色"
+                            onChange={onModeChange}
+                        />
+                        <TouristAvatar />
+                    </div>
+                )}
             </div>
             {openSearch ? (
                 <div className="bg-[#282B33] sticky top-nav py-2 px-4 z-nav tablet:hidden">

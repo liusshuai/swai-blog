@@ -16,8 +16,10 @@ interface FindByEmailControllerParams {
 })
 class FindByEmailController implements AsyncRouteController<FindByEmailControllerParams, TouristProfile | null> {
     @AssertParams('email', 'verifyCode')
-    async execute(params: FindByEmailControllerParams, ctx: Context): Promise<RouteControllerResult<TouristProfile | null>> {
-        
+    async execute(
+        params: FindByEmailControllerParams,
+        ctx: Context,
+    ): Promise<RouteControllerResult<TouristProfile | null>> {
         if (params.verifyCode !== '1234') {
             throw new Error('邮箱验证码已过期或错误，请稍后重试');
         }
@@ -41,7 +43,7 @@ class FindByEmailController implements AsyncRouteController<FindByEmailControlle
         ctx.cookies.set(TOURIST_LAST_VISIT_TOKEN_KEY, tourist.last_visit_token, {
             httpOnly: true,
             // secure: true, // if https
-        })
+        });
 
         return new RouteControllerResult(tourist);
     }

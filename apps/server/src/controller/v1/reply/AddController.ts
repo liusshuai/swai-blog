@@ -12,7 +12,7 @@ interface AddControllerParams {
 }
 
 @RouteController({
-    methods: 'post'
+    methods: 'post',
 })
 class AddController implements AsyncRouteController<AddControllerParams, CommentReply> {
     @AssertParams('comment_id', 'content', 'to')
@@ -27,7 +27,7 @@ class AddController implements AsyncRouteController<AddControllerParams, Comment
             to: to,
             content,
         });
-        
+
         return new RouteControllerResult(reply);
     }
 }

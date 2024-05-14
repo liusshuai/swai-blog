@@ -17,9 +17,12 @@ const MobileSide = observer(({ tStore }: { tStore: typeof touristStore }) => {
             <div>
                 <UserData />
                 <AppNavs />
-                <div className='mt-2.5 ps-4 pe-5 flex items-center justify-between' onClick={() => tStore.setEditDialogVisible(true)}>
-                    <img className='w-8 h-8 rounded-full' src={tStore.touristAvatar.get()} alt='' />
-                    <span className='inline-flex items-center text-secondary text-sm dark:text-secondary-dark'>
+                <div
+                    className="mt-2.5 ps-4 pe-5 flex items-center justify-between"
+                    onClick={() => tStore.setEditDialogVisible(true)}
+                >
+                    <img className="w-8 h-8 rounded-full" src={tStore.touristAvatar.get()} alt="" />
+                    <span className="inline-flex items-center text-secondary text-sm dark:text-secondary-dark">
                         {tStore.state.profile ? tStore.state.profile.nickname : '编辑信息'}
                         <ArrowIcon size={18} />
                     </span>
@@ -33,4 +36,4 @@ const MobileSide = observer(({ tStore }: { tStore: typeof touristStore }) => {
     );
 });
 
-export default () => <MobileSide tStore={touristStore} />
+export default () => <MobileSide tStore={touristStore} />;

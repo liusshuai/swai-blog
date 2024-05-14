@@ -45,10 +45,10 @@ const Drawer: React.FC<DrawerProps> = (props) => {
     }, [open]);
 
     const defaultStyle = useMemo<React.CSSProperties>(() => {
-       return {
+        return {
             transition: `transform ${DURATION}ms ease-in-out`,
             width: typeof size === 'number' ? `${size}px` : size,
-       };
+        };
     }, [size]);
 
     const overlayClasses = useMemo(() => {
@@ -131,7 +131,11 @@ const Drawer: React.FC<DrawerProps> = (props) => {
 
     return show
         ? createPortal(
-              <Overlay className={overlayClasses} opacity={0.5} onClick={closeOnClickOverlay ? props.onClose : undefined}>
+              <Overlay
+                  className={overlayClasses}
+                  opacity={0.5}
+                  onClick={closeOnClickOverlay ? props.onClose : undefined}
+              >
                   <Transition
                       in={props.open}
                       nodeRef={nodeRef}
@@ -155,7 +159,7 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                                       className={getClassNames(
                                           'drawer__head',
                                           'h-12',
-                                          'flex', 
+                                          'flex',
                                           'justify-between',
                                           'items-center',
                                           'p-2.5',
@@ -163,16 +167,18 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                                           'dark:text-primary-dark',
                                       )}
                                   >
-                                      <Typography type='title'>{props.title}</Typography>
+                                      <Typography type="title">{props.title}</Typography>
                                       {showClose ? <CloseIcon size={20} onClick={props.onClose} /> : null}
                                   </div>
                               ) : null}
                               <div className={getClassNames('drawer__body', 'flex-grow', 'p-2.5', 'overflow-y-auto')}>
                                   {props.children}
                               </div>
-                              {props.actions ? <div className={getClassNames('drawer__actions', 'p-2.5 safe-pb-2.5')}>
-                                { props.actions }
-                              </div> : null}
+                              {props.actions ? (
+                                  <div className={getClassNames('drawer__actions', 'p-2.5 safe-pb-2.5')}>
+                                      {props.actions}
+                                  </div>
+                              ) : null}
                           </div>
                       )}
                   </Transition>

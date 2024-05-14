@@ -8,7 +8,6 @@ import { DocLiked } from '@/entity/DocLIked';
 @RouteController()
 class GetTouristLikedDocIdsController implements AsyncRouteController<void, number[]> {
     async execute(params: void, ctx: Context): Promise<RouteControllerResult<number[]>> {
-        
         const touristId = ctx.cookies.get(TOURIST_UUID_KEY);
         if (touristId) {
             const touristRepo = AppDataSource.getRepository(Tourist);
@@ -21,9 +20,9 @@ class GetTouristLikedDocIdsController implements AsyncRouteController<void, numb
                 const records = await docLikedRepo.find({
                     where: {
                         vuid: visitor.id,
-                    }
+                    },
                 });
-                return new RouteControllerResult(records.map(record => record.docId));
+                return new RouteControllerResult(records.map((record) => record.docId));
             }
         }
 

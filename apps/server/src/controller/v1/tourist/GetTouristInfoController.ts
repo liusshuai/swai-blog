@@ -8,7 +8,6 @@ import { TOURIST_LAST_VISIT_TOKEN_KEY, TOURIST_UUID_KEY } from '@/common/constan
 @RouteController()
 class GetTouristInfoController implements AsyncRouteController<void, TouristProfile | null> {
     async execute(params: void, ctx: Context): Promise<RouteControllerResult<TouristProfile | null>> {
-        
         const visitorId = ctx.cookies.get(TOURIST_UUID_KEY);
         const lastVisitToken = ctx.cookies.get(TOURIST_LAST_VISIT_TOKEN_KEY);
         if (visitorId && lastVisitToken) {
