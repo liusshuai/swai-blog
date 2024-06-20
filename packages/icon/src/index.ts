@@ -17,3 +17,8 @@ export { default as SendIcon } from './SendIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as DoneAllIcon } from './DoneAllIcon';
 export { default as DeleteIcon } from './DeleteIcon';
+export { default as DataScreenIcon } from './DataScreenIcon';
+export { default as DocSearchIcon } from './DocSearchIcon';
+export { default as MenuFoldIcon } from './MenuFoldIcon';
+export { default as MenuUnFoldIcon } from './MenuUnFoldIcon';
+export { default as PeoplesIcon } from './PeoplesIcon';

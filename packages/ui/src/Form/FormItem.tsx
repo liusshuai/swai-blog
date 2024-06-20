@@ -27,7 +27,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
     const classes = useMemo(() => {
         return getClassNames(
-            'form-item mb-8',
+            'form-item mb-10',
             {
                 flex: Boolean(label),
                 'flex-col gap-2': label && _labelPosition === 'top',

@@ -12,6 +12,10 @@ export { default as Textarea } from './Textarea';
 export { default as SearchInput } from './SearchInput';
 export { default as Form } from './Form';
 export { default as BottomToolBar } from './BottomToolBar';
+export { default as Popup } from './Popup';
+export { default as Tooltip } from './Tooltip';
+export { default as AppSideBar } from './AppSideBar';
+export { default as Table } from './Table';
 
 export { default as useAppTheme } from './utils/useAppTheme';
 export * from './utils/useAppTheme';
