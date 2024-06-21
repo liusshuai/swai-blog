@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import crypto from 'crypto';
-import { AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
+import { AsyncRouteController, RouteController } from '@swai/route-controller';
 import config from '@/common/serverConfig';
 
 interface CheckControllerParams {
@@ -13,8 +13,8 @@ interface CheckControllerParams {
 @RouteController({
     methods: 'get',
 })
-class CheckController implements AsyncRouteController<CheckControllerParams, string> {
-    async execute(params: CheckControllerParams, ctx: Context): Promise<RouteControllerResult<string>> {
+class CheckController implements AsyncRouteController<CheckControllerParams, void> {
+    async execute(params: CheckControllerParams, ctx: Context): Promise<any> {
         const token = config.get('wx').token;
 
         if (!token) {
@@ -30,6 +30,7 @@ class CheckController implements AsyncRouteController<CheckControllerParams, str
             throw new Error('check failed');
         }
 
-        return new RouteControllerResult(echostr);
+        ctx.status = 200;
+        ctx.body = echostr;
     }
 }
