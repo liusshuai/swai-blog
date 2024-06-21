@@ -3,14 +3,18 @@ import logoShort from '@/assets/images/logo_short.png';
 import { AppSideBar } from '@swai/ui';
 import { CommentIcon, DataScreenIcon, DocSearchIcon, PeoplesIcon } from '@swai/icon';
 import type { MenuItem } from '@swai/ui/lib/Menu';
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface AppSideProps {
     className?: string;
     menuFold?: boolean;
 }
 export default (props: AppSideProps) => {
-    const { menuFold, className } = props;
+    const { menuFold } = props;
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const menus = useRef<MenuItem[]>([
         {
@@ -25,7 +29,7 @@ export default (props: AppSideProps) => {
             children: [
                 {
                     label: '文章列表',
-                    name: 'doc-list',
+                    name: 'docs',
                 },
             ],
         },
@@ -36,11 +40,11 @@ export default (props: AppSideProps) => {
             children: [
                 {
                     label: '评论列表',
-                    name: 'comment-list',
+                    name: 'comments',
                 },
                 {
-                    label: '回复列表',
-                    name: 'reply-list',
+                    label: '留言板',
+                    name: 'messages',
                 },
             ],
         },
@@ -51,11 +55,19 @@ export default (props: AppSideProps) => {
             children: [
                 {
                     label: '用户列表',
-                    name: 'follower-list',
+                    name: 'followers',
                 },
             ],
         },
     ]);
+
+    const currentMenu = useMemo(() => {
+        return location.pathname.replace('/', '');
+    }, [location.pathname]);
+
+    function onMenuSelect(name: string) {
+        navigate('/' + name);
+    }
 
     return (
         <AppSideBar
@@ -63,6 +75,8 @@ export default (props: AppSideProps) => {
             fold={menuFold}
             head={<img className={`w-full h-full object-cover`} src={menuFold ? logoShort : logo} alt="LSSHUAISL" />}
             menus={menus.current}
+            activeMenu={currentMenu}
+            onMenuSelect={onMenuSelect}
         />
     );
 };

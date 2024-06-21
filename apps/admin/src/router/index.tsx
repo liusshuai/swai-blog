@@ -1,10 +1,14 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
+import lazyload from '../components/layout/PageLazyLoad';
 
 const Login = React.lazy(() => import('../pages/login'));
 const Dashboard = React.lazy(() => import('../pages/dashboard'));
 const Docs = React.lazy(() => import('../pages/docs'));
+const Comments = React.lazy(() => import('../pages/comments'));
+const Messages = React.lazy(() => import('../pages/messages'));
+const Followers = React.lazy(() => import('../pages/followers'));
 
 export default createBrowserRouter([
     {
@@ -14,19 +18,23 @@ export default createBrowserRouter([
         children: [
             {
                 path: '/dashboard',
-                element: (
-                    <React.Suspense fallback={<p>Loading...</p>}>
-                        <Dashboard />
-                    </React.Suspense>
-                ),
+                element: lazyload(<Dashboard />),
             },
             {
                 path: '/docs',
-                element: (
-                    <React.Suspense fallback={<p>Loading...</p>}>
-                        <Docs />
-                    </React.Suspense>
-                ),
+                element: lazyload(<Docs />),
+            },
+            {
+                path: '/comments',
+                element: lazyload(<Comments />),
+            },
+            {
+                path: '/messages',
+                element: lazyload(<Messages />),
+            },
+            {
+                path: '/followers',
+                element: lazyload(<Followers />),
             },
         ],
     },

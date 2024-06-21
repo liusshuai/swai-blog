@@ -13,11 +13,14 @@ export interface AppSideBarProps {
     head?: React.ReactNode;
     foot?: React.ReactNode;
     menus?: MenuItem[];
+    activeMenu?: string;
     fold?: boolean;
+
+    onMenuSelect?: (name: string) => void;
 }
 
 const AppSideBar: React.FC<AppSideBarProps> = (props) => {
-    const { theme = 'light', fold = false, menus = [] } = props;
+    const { theme = 'light', activeMenu = '', fold = false, menus = [] } = props;
 
     const [collapsed, setCollapsed] = useState(fold);
 
@@ -37,8 +40,6 @@ const AppSideBar: React.FC<AppSideBarProps> = (props) => {
             ),
         [fold],
     );
-
-    function onMenuSelect(name: string) {}
 
     function onTransitionEnd() {
         startTransition(() => {
@@ -105,7 +106,8 @@ const AppSideBar: React.FC<AppSideBarProps> = (props) => {
                             theme={theme}
                             menus={menus}
                             popupSubMenu={collapsed}
-                            onSelect={onMenuSelect}
+                            activeName={activeMenu}
+                            onSelect={props.onMenuSelect}
                             renderItem={renderItem}
                             renderSubMenuTitle={renderSubMenuTitle}
                         />

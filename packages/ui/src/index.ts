@@ -16,6 +16,7 @@ export { default as Popup } from './Popup';
 export { default as Tooltip } from './Tooltip';
 export { default as AppSideBar } from './AppSideBar';
 export { default as Table } from './Table';
+export { default as Breadcrumb } from './Breadcrumb';
 
 export { default as useAppTheme } from './utils/useAppTheme';
 export * from './utils/useAppTheme';
