@@ -13,4 +13,7 @@ export default new ServerConfig({
         password: '',
         database: '',
     },
+    wx: {
+        token: '',
+    },
 });
