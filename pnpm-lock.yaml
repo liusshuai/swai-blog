@@ -53,6 +53,9 @@ importers:
       '@swai/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      axios:
+        specifier: ^1.6.7
+        version: 1.6.7
       react:
         specifier: ^18.2.0
         version: 18.2.0

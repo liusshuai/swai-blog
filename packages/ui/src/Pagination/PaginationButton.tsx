@@ -1,29 +1,29 @@
 import React from 'react';
 import { ComponentContext } from '../types/ComponentContext';
-import classNames from 'classnames';
+import { ComponentSize } from '../types/ComponentTypes';
+import { CONTROL_HEIGHT, MIN_CONTROL_WIDTH } from '../utils/constants';
+import { getClassNames } from '../utils/getClassNames';
 
 export interface PaginationButtonProps extends ComponentContext {
     active?: boolean;
     data: number | 'prev' | 'next' | 'prev-more' | 'next-more';
+    size?: ComponentSize;
+    disabled?: boolean;
 }
 
 const PaginationButton: React.FC<PaginationButtonProps> = (props) => {
-    const classes = classNames(
-        'sw-pagination-button',
-        [
-            'min-w-7',
-            'h-7',
-            'inline-flex',
-            'justify-center',
-            'items-center',
-            'text-sm',
-            'rounded-sm',
-            'hover:bg-gray-950',
-            'hover:text-white',
-        ],
+    const { size = 'default', disabled, active } = props;
+
+    const classes = getClassNames(
+        'pagination__button',
+        ['inline-flex', 'justify-center', 'items-center', 'px-1', 'text-sm', 'rounded', 'select-none'],
+        [CONTROL_HEIGHT[size], MIN_CONTROL_WIDTH[size]],
         {
-            'bg-gray-950 text-white': props.active,
-            'bg-transparent': !props.active,
+            'hover:bg-gray-50': !active && !disabled,
+            'bg-primary text-white': active,
+            'bg-transparent': !active,
+            'opacity-30 cursor-not-allowed': disabled,
+            'cursor-pointer': !disabled,
         },
         props.className,
     );

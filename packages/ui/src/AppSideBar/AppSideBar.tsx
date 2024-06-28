@@ -1,3 +1,4 @@
+'use client'
 import React, { ReactNode, startTransition, useEffect, useMemo, useState } from 'react';
 import type { Theme } from '../types/ComponentTypes';
 import type { MenuItem } from '../Menu';

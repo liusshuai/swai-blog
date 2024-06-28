@@ -1,7 +1,16 @@
-import { Card, Table } from '@swai/ui';
+import { Button, Card, Pagination, Switch, Table } from '@swai/ui';
 import { TableColumn } from '@swai/ui/lib/Table/Table';
+import { useEffect, useState } from 'react';
+import { getDocList } from '../../api/doc';
+import { Doc } from '@swai/types';
+import { formatTime } from '../../utils/formatTime';
 
 export default () => {
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [list, setList] = useState<Doc[]>([]);
+    const [total, setTotal] = useState<number>(0);
+
     const columns: TableColumn[] = [
         {
             label: 'ID',
@@ -11,12 +20,16 @@ export default () => {
         {
             label: '标题',
             prop: 'title',
-            width: 160,
-        },
-        {
-            label: '描述',
-            prop: 'description',
-            width: 400,
+            render(row: Doc) {
+                if (row.public === 1 && row.status === 1) {
+                    return (
+                        <a href={`https://www.lsshuaisl.com/article/${row.id}`} target="_blank" className="text-link">
+                            {row.title}
+                        </a>
+                    );
+                }
+                return row.title;
+            },
         },
         {
             label: '全文字数',
@@ -32,74 +45,81 @@ export default () => {
         },
         {
             label: '评论数',
-            prop: 'comments_count',
+            prop: 'comment_count',
         },
         {
             label: '状态',
             prop: 'status',
+            render(row: Doc) {
+                return row.status === 1 ? '发布' : '草稿';
+            },
         },
         {
             label: '是否公开',
             prop: 'public',
+            render(row: Doc) {
+                return <Switch value={row.public === 1} size="small" />;
+            },
         },
         {
             label: '创建时间',
             prop: 'created_at',
             width: 180,
+            render(row: Doc) {
+                return formatTime(row.created_at);
+            },
         },
         {
             label: '更新时间',
             prop: 'updated_at',
             width: 180,
+            render(row: Doc) {
+                return formatTime(row.updated_at);
+            },
         },
+        // {
+        //     label: '操作',
+        //     prop: 'action',
+        //     render(row) {
+        //         return (
+        //             <div>
+        //                 <Button>操作</Button>
+        //             </div>
+        //         );
+        //     },
+        // },
     ];
 
-    const source = [
-        {
-            id: 1,
-            title: 'tsc编译项目的别名',
-            description: `在typescript项目中使用别名的场景：import { add } from '../../utils/add';想要通过别名引入，如：import { add } from '@/utils/add';首先需要配置tsconfig.json的baseUrl和paths，如下：// ts...`,
-            word_count: 3000,
-            likes_count: 100,
-            read_count: 10000,
-            comments_count: 20,
-            status: 1,
-            public: 1,
-            created_at: '2024-03-06 18:06',
-            updated_at: '2024-05-06 12:16',
-        },
-        {
-            id: 2,
-            title: 'BFC',
-            description: `BFC（Block Formatting Context）：块格式化上下文，是web页面中盒模型布局的一种CSS渲染模式；在BFC中，盒子会垂直布局，并且可以包含浮动元素；创建BFC元素，会对其他内部的子元素进行独立布局，而与外部的其他元素互不影响；创建BFC的情况根元素：<html>浮动元素...`,
-            word_count: 3000,
-            likes_count: 100,
-            read_count: 10000,
-            comments_count: 20,
-            status: 1,
-            public: 1,
-            created_at: '2024-03-06 18:06',
-            updated_at: '2024-05-06 12:16',
-        },
-        {
-            id: 3,
-            title: '十六进制、十进制转换',
-            description: `十六进制数字可以通过#或者0x表示，如：0x1A或#1A；A~F对应数字10-15；转换规则跟二进制转十进制、十进制转二进制一样，只是除/乘的基数变成了16；如：0x1A转换成十进制，就是 1 * (16 ^1) + 10 * (16 ^0) = 26代码题：// 将十六进制颜色值转换成rgb...`,
-            word_count: 3000,
-            likes_count: 100,
-            read_count: 10000,
-            comments_count: 20,
-            status: 1,
-            public: 1,
-            created_at: '2024-03-06 18:06',
-            updated_at: '2024-05-06 12:16',
-        },
-    ];
+    useEffect(getData, []);
+
+    function getData(page = 1) {
+        setLoading(true);
+        getDocList({
+            page: page,
+        })
+            .then((res) => {
+                setList([...res.list]);
+                setTotal(res.total);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }
+
+    function onPageChange(page: number) {
+        setPage(() => {
+            const newPage = page;
+
+            getData(newPage);
+            return newPage;
+        });
+    }
 
     return (
-        <div className="h-[1000px]">
+        <div className="">
             <Card>
-                <Table border={false} columns={columns} rowKey="id" source={source} />
+                <Table border={false} loading={loading} columns={columns} rowKey="id" source={list} />
+                <Pagination className="mt-4" page={page} total={total} pageChange={onPageChange} />
             </Card>
         </div>
     );
