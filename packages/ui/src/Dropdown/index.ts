@@ -1,7 +1,3 @@
-import React, { useCallback, useMemo } from 'react';
-import { ComponentContext } from '../types/ComponentContext';
-import { ComponentSize } from '../types/ComponentTypes';
+import Dropdown from './Dropdown';
 
-export interface DropdownProps extends Omit<ComponentContext, 'children'> {
-    size?: ComponentSize;
-}
+export default Dropdown;

@@ -1,8 +1,7 @@
 import { Context } from 'koa';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
-import { CommentType } from '@/entity/ContentComment';
 import { CommentRepository } from '@/utils/CommentRepository';
-import { Comment } from '@swai/types';
+import { Comment, CommentType } from '@swai/types';
 
 interface AddCommentControllerParams {
     docId: number;

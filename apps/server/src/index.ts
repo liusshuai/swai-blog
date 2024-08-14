@@ -5,6 +5,7 @@ import { routeController } from '@swai/route-controller';
 import 'reflect-metadata';
 const cors = require('@koa/cors');
 import './common/database';
+import { terminateMailerQueue } from './queue/mailerQueue';
 
 const app = new Koa();
 
@@ -39,3 +40,9 @@ app.use(
 );
 
 app.listen(process.env.PORT);
+
+process.on('SIGINT', async () => {
+    await terminateMailerQueue();
+
+    process.exit(0);
+});

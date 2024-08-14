@@ -1,6 +1,15 @@
 'use client';
 
-import React, { CSSProperties, startTransition, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+    CSSProperties,
+    forwardRef,
+    startTransition,
+    useEffect,
+    useImperativeHandle,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
 import { throttle } from 'lodash-es';
 import { getClassNames } from '../utils/getClassNames';
 import { createPortal } from 'react-dom';
@@ -25,7 +34,7 @@ export interface PopupProps {
     children: React.ReactNode;
     content: React.ReactNode;
     position?: PopupPosition;
-    trigger?: 'hover' | 'click';
+    trigger?: 'hover' | 'click' | 'manual';
     space?: number;
     duration?: number;
     anchorClasses?: string;
@@ -34,7 +43,12 @@ export interface PopupProps {
     hide?: () => void;
 }
 
-const Popup: React.FC<PopupProps> = (props) => {
+export interface PopupRef {
+    open: () => void;
+    close: () => void;
+}
+
+const Popup = forwardRef<PopupRef, PopupProps>((props, ref) => {
     const { disabled, position = 'bottom', trigger = 'click', space = 10, duration = 150, anchorClasses } = props;
 
     const anchorRef = useRef<HTMLSpanElement | null>(null);
@@ -54,6 +68,17 @@ const Popup: React.FC<PopupProps> = (props) => {
             }
         });
     }
+
+    useImperativeHandle(ref, () => {
+        return {
+            open: () => {
+                setOpen(true);
+            },
+            close: () => {
+                setOpen(false);
+            },
+        };
+    });
 
     useLayoutEffect(updateContentStyle, [contentRef.current, anchorRef.current, space]);
 
@@ -101,6 +126,7 @@ const Popup: React.FC<PopupProps> = (props) => {
 
     useEffect(() => {
         if (open) {
+            updateContentStyle();
             props.show && props.show();
         } else {
             props.hide && props.hide();
@@ -155,7 +181,7 @@ const Popup: React.FC<PopupProps> = (props) => {
             )}
         </>
     );
-};
+});
 
 Popup.displayName = 'Popup';
 export default Popup;

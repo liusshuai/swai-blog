@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { getClassNames } from '../utils/getClassNames';
 import { ComponentContext } from '../types/ComponentContext';
 
@@ -28,19 +28,14 @@ const Breadcrumb: React.FC<BreadcrumbProps> = (props) => {
     return (
         <div className={classes}>
             {source.map((s, i) => (
-                <>
-                    <span key={s.name} className={getLabelItemClasses(s, i)}>
-                        {s.name}
-                    </span>
+                <Fragment key={s.name}>
+                    <span className={getLabelItemClasses(s, i)}>{s.name}</span>
                     {i < source.length - 1 ? (
-                        <span
-                            key={`sep-${i}`}
-                            className={getClassNames('breadcrumb__separator', 'mx-2 text-secondary')}
-                        >
+                        <span className={getClassNames('breadcrumb__separator', 'mx-2 text-secondary')}>
                             {separator}
                         </span>
                     ) : null}
-                </>
+                </Fragment>
             ))}
         </div>
     );

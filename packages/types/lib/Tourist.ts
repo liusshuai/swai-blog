@@ -6,8 +6,7 @@ export interface TouristProfile {
     avatar_style: string;
     avatar_search?: string;
     un_followed?: boolean;
+    is_black?: boolean;
 }
 
-export interface TouristEntity extends TouristProfile {
-    last_visit_token: string;
-}
+export interface TouristEntity extends TouristProfile {}

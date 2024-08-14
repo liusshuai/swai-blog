@@ -1,12 +1,13 @@
 import { Context } from 'koa';
 import { AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import yqsdk from '@/utils/yuquesdk';
-import { Doc } from '@swai/types';
+import { Doc, CommentType } from '@swai/types';
 import { pick } from 'lodash';
 import { AppDataSource } from '@/common/database';
 import { DocLiked } from '@/entity/DocLIked';
 import { CommentRepository } from '@/utils/CommentRepository';
-import { CommentType } from '@/entity/ContentComment';
+import { runtimeLogger } from '@/utils/Logger';
+import { NeedAdmin } from '@/annotation/NeedAdmin';
 
 interface GetDocListControllerParams {
     page: number;
@@ -21,6 +22,7 @@ interface GetDocListControllerResponse {
 
 @RouteController()
 class GetDocListController implements AsyncRouteController<GetDocListControllerParams, GetDocListControllerResponse> {
+    @NeedAdmin()
     async execute(
         params: GetDocListControllerParams,
         ctx: Context,

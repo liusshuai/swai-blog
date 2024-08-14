@@ -1,8 +1,8 @@
 import { Context } from 'koa';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { TOURIST_UUID_KEY } from '@/common/constant';
-import { TouristLogin } from '@/utils/TouristLogin';
-import { CommentType } from '@/entity/ContentComment';
+import { TouristLogin } from '@/annotation/TouristLogin';
+import { CommentType } from '@swai/types';
 import { CommentRepository } from '@/utils/CommentRepository';
 
 interface AddCommentControllerParams {

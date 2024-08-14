@@ -45,9 +45,6 @@ export const routeMeta = Object.freeze<Record<string, RouteMeta>>({
             {
                 name: '评论管理',
             },
-            {
-                name: '留言板',
-            },
         ],
     },
     '/followers': {

@@ -1,6 +1,7 @@
+import { CommentType } from '@swai/types';
 import { AppDataSource } from '@/common/database';
 import { CommentReply } from '@/entity/CommentReply';
-import { CommentType, ContentComment } from '@/entity/ContentComment';
+import { ContentComment } from '@/entity/ContentComment';
 import { Tourist } from '@/entity/Tourist';
 import type { Repository } from 'typeorm';
 

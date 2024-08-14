@@ -1,5 +1,9 @@
 import crypto from 'crypto';
 
 export function createToken() {
-    return crypto.randomBytes(32).toString('hex');
+    return getRandomByte(32);
+}
+
+export function getRandomByte(len: number) {
+    return crypto.randomBytes(len).toString('hex');
 }

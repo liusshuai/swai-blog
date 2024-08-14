@@ -37,15 +37,16 @@ export class Tourist implements TouristEntity {
     avatar_search!: string;
 
     @Column({
-        comment: '游客上一次浏览的token',
-    })
-    last_visit_token!: string;
-
-    @Column({
         default: false,
         comment: '游客是否取消订阅，取消订阅将不会被推送新文章，但是还会收到相关评论的回复',
     })
     un_followed!: boolean;
+
+    @Column({
+        default: false,
+        comment: '游客是否被拉黑，拉黑的游客不能发表评论',
+    })
+    is_black!: boolean;
 
     @CreateDateColumn()
     create_at!: Date;

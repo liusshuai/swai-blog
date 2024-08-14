@@ -9,8 +9,10 @@ export enum CommentType {
 export interface Comment {
     id: number;
     visible: boolean;
+    is_deleted: boolean;
     from: TouristProfile;
     content: string;
+    type: CommentType;
     replies: CommentReply[];
     replyCount: number;
     create_at: string;
@@ -20,6 +22,7 @@ export interface Comment {
 export interface CommentReply {
     id: number;
     visible: boolean;
+    is_deleted: boolean;
     from: TouristProfile;
     to: TouristProfile;
     content: string;

@@ -1,9 +1,14 @@
 import { Button, Card, Form, Input } from '@swai/ui';
 import logo from '@/assets/images/logo.png';
 import './index.less';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
+import { login, sendEmailVerifyCode } from '../../api/login';
+import { useNavigate } from 'react-router-dom';
 
 export default () => {
+    const navigate = useNavigate();
+
+    const formRef = useRef<HTMLFormElement | null>(null);
     const [formData, setFormData] = useState({
         email: '',
         verifyCode: '',
@@ -39,16 +44,34 @@ export default () => {
         };
     }
 
+    function onSendEmail() {
+        if (formData.email) {
+            sendEmailVerifyCode(formData.email).then((res) => {
+                console.log(res);
+            });
+        }
+    }
+
+    function onLogin() {
+        const valid = formRef.current && formRef.current.checkValidity();
+        valid &&
+            login({
+                email: formData.email,
+                code: formData.verifyCode,
+            }).then(() => {
+                navigate('/', { replace: true });
+            });
+    }
+
     return (
         <div className="login-page pt-[10%]">
             <Card className="w-[400px] mx-auto">
                 <img className="w-auto h-16 mx-auto mb-10" src={logo} alt="" />
-                <Form size="large">
+                <Form ref={formRef} size="large">
                     <Form.Item
                         required
                         name="email"
                         label="电子邮箱"
-                        helpText="电子邮件用于接收消息回复，不会公开"
                         error={formError.email}
                         onInvalid={onFiledInvalid('email')}
                     >
@@ -57,7 +80,11 @@ export default () => {
                             placeholder="请输入你的电子邮箱"
                             type="email"
                             onInput={onFormFieldChange('email')}
-                            append={<Button>发送验证码</Button>}
+                            append={
+                                <Button disabled={!formData.email} onClick={onSendEmail}>
+                                    发送验证码
+                                </Button>
+                            }
                         />
                     </Form.Item>
                     <Form.Item
@@ -74,7 +101,9 @@ export default () => {
                         />
                     </Form.Item>
                     <Form.Item>
-                        <Button fullWidth>提交</Button>
+                        <Button fullWidth onClick={onLogin}>
+                            提交
+                        </Button>
                     </Form.Item>
                 </Form>
             </Card>

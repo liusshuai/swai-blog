@@ -1,12 +1,11 @@
 import { Context } from 'koa';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import yqsdk from '@/utils/yuquesdk';
-import { DocDetail } from '@swai/types';
+import { DocDetail, CommentType } from '@swai/types';
 import { pick } from 'lodash';
 import { AppDataSource } from '@/common/database';
 import { DocLiked } from '@/entity/DocLIked';
 import { CommentRepository } from '@/utils/CommentRepository';
-import { CommentType } from '@/entity/ContentComment';
 
 interface GetDocDetailControllerParams {
     id: number;

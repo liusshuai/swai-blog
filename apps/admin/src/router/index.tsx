@@ -2,18 +2,22 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 import lazyload from '../components/layout/PageLazyLoad';
+import RequireAuth from './RequireAuth';
 
 const Login = React.lazy(() => import('../pages/login'));
 const Dashboard = React.lazy(() => import('../pages/dashboard'));
 const Docs = React.lazy(() => import('../pages/docs'));
 const Comments = React.lazy(() => import('../pages/comments'));
-const Messages = React.lazy(() => import('../pages/messages'));
 const Followers = React.lazy(() => import('../pages/followers'));
 
 export default createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: (
+            <RequireAuth>
+                <App />
+            </RequireAuth>
+        ),
         errorElement: <p>you got some errors!</p>,
         children: [
             {
@@ -27,10 +31,6 @@ export default createBrowserRouter([
             {
                 path: '/comments',
                 element: lazyload(<Comments />),
-            },
-            {
-                path: '/messages',
-                element: lazyload(<Messages />),
             },
             {
                 path: '/followers',

@@ -18,9 +18,9 @@ export interface ButtonProps extends ComponentContext, React.ButtonHTMLAttribute
 
 const sizeMap = Object.freeze({
     large: 'h-10 min-w-24 px-5',
-    medium: 'h-8 min-w-20 px-4',
-    default: 'h-7 min-w-16 px-3 text-sm',
-    small: 'h-6 px-1 text-xs',
+    medium: 'h-9 min-w-20 px-4',
+    default: 'h-8 min-w-16 px-3 text-sm',
+    small: 'h-7 px-1 text-xs',
 });
 const colorMap = Object.freeze({
     primary:

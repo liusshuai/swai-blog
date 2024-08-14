@@ -9,6 +9,7 @@ export interface TableColumn {
     prop: string;
     width?: number;
     align?: 'left' | 'center' | 'right';
+    fixed?: 'left' | 'right';
     render?: (row: any) => ReactNode;
 }
 
@@ -38,6 +39,7 @@ const Table: React.FC<TableProps> = (props) => {
     const rootClasses = useMemo(() => {
         return getClassNames(
             'table',
+            'relative overflow-x-auto',
             {
                 border: border,
                 'w-full': true,
@@ -62,11 +64,18 @@ const Table: React.FC<TableProps> = (props) => {
     }, [props.rowClasses]);
 
     const getTableColClasses = (col: TableColumn) => {
-        return classNames('px-5 py-3', {
-            'text-center': !col.align || col.align === 'center',
-            'text-left': col.align === 'left',
-            'text-right': col.align === 'right',
-        });
+        return classNames(
+            'px-5 py-3 bg-content dark:bg-content-dark',
+            {
+                'text-center': !col.align || col.align === 'center',
+                'text-left': col.align === 'left',
+                'text-right': col.align === 'right',
+            },
+            [
+                // table col fixed
+                col.fixed ? 'sticky ' + (col.fixed === 'right' ? 'right-0' : 'left-0') : '',
+            ],
+        );
     };
 
     const renderTableRow = (row: any) => {
@@ -74,6 +83,7 @@ const Table: React.FC<TableProps> = (props) => {
             React.createElement(
                 i === 0 ? 'th' : 'td',
                 {
+                    key: i,
                     scope: i === 0 ? 'row' : undefined,
                     className: getTableColClasses(col) + ' font-normal',
                 },
@@ -83,8 +93,8 @@ const Table: React.FC<TableProps> = (props) => {
     };
 
     return (
-        <div className="relative">
-            <table className={rootClasses}>
+        <div className={rootClasses}>
+            <table className="w-full min-w-max">
                 <colgroup>
                     {columns.map((col) => (
                         <col
@@ -99,7 +109,7 @@ const Table: React.FC<TableProps> = (props) => {
                 <thead className={headerClasses}>
                     <tr>
                         {columns.map((col) => (
-                            <th scope="col" key={col.prop} className={getTableColClasses(col)}>
+                            <th scope="col" key={col.prop} className={getTableColClasses(col) + ' whitespace-nowrap'}>
                                 {col.label}
                             </th>
                         ))}

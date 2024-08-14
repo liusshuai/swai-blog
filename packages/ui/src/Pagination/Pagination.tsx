@@ -111,7 +111,10 @@ const Pagination: React.FC<PaginationProps> = (props) => {
                     break;
                 default:
                     if (/[0-9]/.test(value)) {
-                        props.pageChange(Number(value));
+                        const _page = Number(value);
+                        if (_page !== page) {
+                            props.pageChange(Number(value));
+                        }
                     }
                     break;
             }

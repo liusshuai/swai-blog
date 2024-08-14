@@ -3,7 +3,7 @@ import { AssertParams, AsyncRouteController, RouteController, RouteControllerRes
 import { AppDataSource } from '@/common/database';
 import { DocLiked } from '@/entity/DocLIked';
 import { TOURIST_UUID_KEY } from '@/common/constant';
-import { TouristLogin } from '@/utils/TouristLogin';
+import { TouristLogin } from '@/annotation/TouristLogin';
 
 interface LikeControllerParams {
     docId: number;

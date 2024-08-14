@@ -16,4 +16,9 @@ export default new ServerConfig({
     wx: {
         token: '',
     },
+    mailer: {
+        host: '',
+        username: '',
+        password: '',
+    },
 });

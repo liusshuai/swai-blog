@@ -3,8 +3,7 @@ import type { TouristProfile } from '@swai/types';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
-import { TOURIST_LAST_VISIT_TOKEN_KEY, TOURIST_UUID_KEY } from '@/common/constant';
-import { createToken } from '@/utils/cryptoToken';
+import { setTouristCookies } from '@/utils/cookies';
 
 interface FindByEmailControllerParams {
     email: string;
@@ -33,17 +32,9 @@ class FindByEmailController implements AsyncRouteController<FindByEmailControlle
             throw new Error('该邮箱并未留存');
         }
 
-        tourist.last_visit_token = createToken();
         await touristRepo.save(tourist);
 
-        ctx.cookies.set(TOURIST_UUID_KEY, tourist.id, {
-            httpOnly: true,
-            // secure: true, // if https
-        });
-        ctx.cookies.set(TOURIST_LAST_VISIT_TOKEN_KEY, tourist.last_visit_token, {
-            httpOnly: true,
-            // secure: true, // if https
-        });
+        setTouristCookies(ctx, tourist.id);
 
         return new RouteControllerResult(tourist);
     }

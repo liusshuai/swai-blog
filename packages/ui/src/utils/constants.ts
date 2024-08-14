@@ -1,7 +1,7 @@
 export const CONTROL_HEIGHT = Object.freeze({
-    small: 'h-6',
-    default: 'h-7',
-    medium: 'h-8',
+    small: 'h-7',
+    default: 'h-8',
+    medium: 'h-9',
     large: 'h-10',
 });
 

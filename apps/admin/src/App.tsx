@@ -12,10 +12,10 @@ function App() {
 
     return (
         <div className="h-full flex">
-            <AppSide className="shrink-0" menuFold={menuFold} />
-            <div className="h-full flex flex-col grow">
+            <AppSide menuFold={menuFold} />
+            <div className="h-full flex flex-col grow overflow-x-hidden">
                 <AppToolbar menuFold={menuFold} toggleMenuFold={toggleMenuFold} />
-                <div className="grow bg-gray-50 p-7 overflow-auto">
+                <div className="grow bg-gray-50 p-7 overflow-y-auto">
                     <Outlet />
                 </div>
             </div>

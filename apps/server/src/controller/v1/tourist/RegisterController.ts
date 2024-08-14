@@ -3,9 +3,8 @@ import type { TouristProfile } from '@swai/types';
 import { AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
-import { TOURIST_LAST_VISIT_TOKEN_KEY, TOURIST_UUID_KEY } from '@/common/constant';
-import { omit } from 'lodash';
-import { createToken } from '@/utils/cryptoToken';
+import { TOURIST_UUID_KEY } from '@/common/constant';
+import { setTouristCookies } from '@/utils/cookies';
 
 interface RegisterControllerParams {
     email: string;
@@ -40,19 +39,11 @@ class RegisterController implements AsyncRouteController<RegisterControllerParam
         newTourist.website = params.website || '';
         newTourist.avatar_style = params.avatar_style;
         newTourist.avatar_search = params.avatar_search || '';
-        newTourist.last_visit_token = createToken();
 
         await touristRepo.save(newTourist);
 
-        ctx.cookies.set(TOURIST_UUID_KEY, newTourist.id, {
-            httpOnly: true,
-            // secure: true, // if https
-        });
-        ctx.cookies.set(TOURIST_LAST_VISIT_TOKEN_KEY, newTourist.last_visit_token, {
-            httpOnly: true,
-            // secure: true, // if https
-        });
+        setTouristCookies(ctx, newTourist.id);
 
-        return new RouteControllerResult(omit(newTourist, ['last_visit_token']));
+        return new RouteControllerResult(newTourist);
     }
 }

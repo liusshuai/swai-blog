@@ -42,10 +42,6 @@ export default (props: AppSideProps) => {
                     label: '评论列表',
                     name: 'comments',
                 },
-                {
-                    label: '留言板',
-                    name: 'messages',
-                },
             ],
         },
         {
@@ -71,6 +67,7 @@ export default (props: AppSideProps) => {
 
     return (
         <AppSideBar
+            className="shrink-0"
             theme="dark"
             fold={menuFold}
             head={<img className={`w-full h-full object-cover`} src={menuFold ? logoShort : logo} alt="LSSHUAISL" />}

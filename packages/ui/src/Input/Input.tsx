@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
 import { CONTROL_HEIGHT } from '../utils/constants';
@@ -14,7 +14,7 @@ export interface InputProps
     prepend?: React.ReactNode;
 }
 
-const Input: React.FC<InputProps> = (props) => {
+const Input = forwardRef<HTMLDivElement, InputProps>((props, ref) => {
     const { className, style, size = 'default', round, prepend, append, ...extraProps } = props;
     const _size = React.useMemo(() => {
         if (size === 'medium') return 'default';
@@ -37,13 +37,13 @@ const Input: React.FC<InputProps> = (props) => {
     );
 
     return (
-        <div className={classes} style={style}>
+        <div ref={ref} className={classes} style={style}>
             {prepend ? <span className="p-1 shrink-0">{prepend}</span> : null}
             <input className="grow h-full outline-none px-2 bg-transparent" {...extraProps} />
             {append ? <span className="p-1 shrink-0">{append}</span> : null}
         </div>
     );
-};
+});
 
 Input.displayName = 'Input';
 export default Input;

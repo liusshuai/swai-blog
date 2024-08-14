@@ -1,5 +1,5 @@
 'use client';
-import React, { FormHTMLAttributes, createContext, forwardRef } from 'react';
+import React, { FormEvent, FormHTMLAttributes, createContext, forwardRef } from 'react';
 import { getClassNames } from '../utils/getClassNames';
 import { ComponentContext } from '../types/ComponentContext';
 import { ComponentSize } from '../types/ComponentTypes';
@@ -33,8 +33,13 @@ const Form = forwardRef<HTMLFormElement, FormProps>((props, ref) => {
 
     const classes = getClassNames('form', className);
 
+    function onSubmit(e: FormEvent<HTMLElement>) {
+        e.preventDefault();
+        props.onSubmit && props.onSubmit(e);
+    }
+
     return (
-        <form ref={ref} className={classes} {...extraProps}>
+        <form ref={ref} className={classes} {...extraProps} onSubmit={onSubmit}>
             <FormContext.Provider
                 value={{
                     size,

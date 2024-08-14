@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { TOURIST_UUID_KEY } from '@/common/constant';
-import { TouristLogin } from '@/utils/TouristLogin';
+import { TouristLogin } from '@/annotation/TouristLogin';
 import { CommentRepository } from '@/utils/CommentRepository';
 
 interface RemoveControllerParams {

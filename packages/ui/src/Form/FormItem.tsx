@@ -1,4 +1,4 @@
-import React, { FormEvent, cloneElement, useContext, useMemo } from 'react';
+import React, { FormEvent, Fragment, cloneElement, createElement, useContext, useMemo } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
 import { FormContext, FormLabelProps } from './Form';
@@ -27,7 +27,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
     const classes = useMemo(() => {
         return getClassNames(
-            'form-item mb-10',
+            'form-item mb-8',
             {
                 flex: Boolean(label),
                 'flex-col gap-2': label && _labelPosition === 'top',
@@ -43,6 +43,30 @@ const FormItem: React.FC<FormItemProps> = (props) => {
         });
     }, [label, _labelPosition, _labelAlign]);
 
+    function renderChildren() {
+        if (props.children instanceof Array) {
+            return createElement(
+                Fragment,
+                null,
+                props.children.map((child, i) =>
+                    cloneElement(child, {
+                        key: i,
+                        size: context.size,
+                    }),
+                ),
+            );
+        }
+
+        return cloneElement(props.children as React.FunctionComponentElement<any>, {
+            id: name,
+            name,
+            required,
+            pattern,
+            size: context.size,
+            onInvalid: props.onInvalid,
+        });
+    }
+
     return (
         <div className={classes}>
             {label ? (
@@ -56,14 +80,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
                 </label>
             ) : null}
             <div className={getClassNames('form-item__control', 'relative grow')}>
-                {cloneElement(props.children as React.FunctionComponentElement<any>, {
-                    id: name,
-                    name,
-                    required,
-                    pattern,
-                    size: context.size,
-                    onInvalid: props.onInvalid,
-                })}
+                {renderChildren()}
 
                 {helpText || error ? (
                     <div className={getClassNames('form-item__tip', 'absolute left-0 top-[calc(100%+4px)] text-xs')}>

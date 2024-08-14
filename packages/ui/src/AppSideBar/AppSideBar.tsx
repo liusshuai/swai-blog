@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { ReactNode, startTransition, useEffect, useMemo, useState } from 'react';
 import type { Theme } from '../types/ComponentTypes';
 import type { MenuItem } from '../Menu';
@@ -16,6 +16,7 @@ export interface AppSideBarProps {
     menus?: MenuItem[];
     activeMenu?: string;
     fold?: boolean;
+    className?: string;
 
     onMenuSelect?: (name: string) => void;
 }
@@ -38,6 +39,7 @@ const AppSideBar: React.FC<AppSideBarProps> = (props) => {
                 'h-full px-2.5 bg-content dark:bg-content-dark',
                 'transition-all duration-200',
                 [fold ? 'w-20' : 'w-64'],
+                props.className,
             ),
         [fold],
     );

@@ -1,12 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
+import { CommentType } from '@swai/types';
 import { BaseComment } from './BaseComment';
 import { CommentReply } from './CommentReply';
-
-export enum CommentType {
-    DOC = 'doc',
-    NOTE = 'note',
-    BOADR = 'board',
-}
 
 @Entity()
 export class ContentComment extends BaseComment {

@@ -1,4 +1,5 @@
 const plugin = require('tailwindcss/plugin');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -7,6 +8,9 @@ module.exports = {
     content: ['./src/**/*.{ts,tsx}', './node_modules/@swai/ui/lib/**/*.js'],
     theme: {
         extend: {
+            screens: {
+                ...defaultTheme.screens,
+            },
             spacing: {
                 nav: 'var(--nav-height)',
                 container: 'var(--container-padding)',
