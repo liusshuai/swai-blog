@@ -23,4 +23,5 @@ export { default as Breadcrumb } from './Breadcrumb';
 export { default as useAppTheme } from './utils/useAppTheme';
 export * from './utils/useAppTheme';
 export * from './utils/useMediaQuery';
+export * from './utils/useCountDown';
 export * from './Dialog/openDialog';
