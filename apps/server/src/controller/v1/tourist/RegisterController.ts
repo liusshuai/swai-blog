@@ -3,7 +3,6 @@ import type { TouristProfile } from '@swai/types';
 import { AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
-import { TOURIST_UUID_KEY } from '@/common/constant';
 import { setTouristCookies } from '@/utils/cookies';
 import { checkEmailCode } from '@/utils/checkEmailCode';
 

@@ -20,3 +20,7 @@ export function findByEmail(params: Pick<TouristRegisterParams, 'email' | 'verif
 export function getTouristInfo() {
     return get<TouristProfile>('/api/v1/tourist/getTouristInfo');
 }
+
+export function updateTouristInfo(params: TouristRegisterParams) {
+    return post<TouristProfile>('/api/v1/tourist/updateInfo', params);
+}

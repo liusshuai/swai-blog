@@ -1,5 +1,5 @@
 'use client';
-import { Button, Dialog, Drawer, Form, Input, useMobileMediaQuery } from '@swai/ui';
+import { Button, Dialog, Drawer, Form, Input, useCountDown, useMobileMediaQuery } from '@swai/ui';
 import { observer } from 'mobx-react-lite';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import touristStore from '@/store/touristStore';
@@ -8,7 +8,7 @@ import { DEFAULT_AVATAR_SEARCH, DEFAULT_AVATAR_STYLE, createDiceBearAvatar } fro
 import type { DrawerProps } from '@swai/ui/lib/Drawer/Drawer';
 import type { DialogProps } from '@swai/ui/lib/Dialog/Dialog';
 import { emailVerify } from '@/api/tourist/emailVerify';
-import { findByEmail, register } from '@/api/tourist/register';
+import { findByEmail, register, updateTouristInfo } from '@/api/tourist/register';
 
 const EXPLAIN_DATA = {
     styleName: '',
@@ -21,6 +21,10 @@ const EXPLAIN_DATA = {
 };
 const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
     const isMobile = useMobileMediaQuery();
+
+    const { current, reset } = useCountDown({
+        time: 0,
+    });
 
     const formRef = useRef<HTMLFormElement | null>(null);
     const [editType, setEditType] = useState<'register' | 'login'>('register');
@@ -122,6 +126,7 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
             ...EXPLAIN_DATA,
         });
         setEditType('register');
+        reset(0);
     }
 
     function createAvatar() {
@@ -141,7 +146,7 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
         const valid = formRef.current && formRef.current.checkValidity();
         if (valid) {
             setSubmitting(true);
-            (editType === 'register' ? doRegisterTourist : doFindTourist)()
+            (touristProfile ? doUpdateTourist : editType === 'register' ? doRegisterTourist : doFindTourist)()
                 .then((res) => {
                     onCloseEdit();
 
@@ -176,6 +181,17 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
         });
     }
 
+    function doUpdateTourist() {
+        return updateTouristInfo({
+            email: formData.email,
+            nickname: formData.nickname,
+            website: formData.userSite,
+            verifyCode: formData.verifyCode,
+            avatar_style: formData.styleName,
+            avatar_search: formData.search,
+        });
+    }
+
     function formActionsRender() {
         return (
             <div className="flex items-center tablet:justify-end">
@@ -199,8 +215,8 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
         emailVerify({
             code: formData.captchaCode,
             email: formData.email,
-        }).then((res) => {
-            console.log(res);
+        }).then(() => {
+            reset(60_000);
         });
     }
 
@@ -313,9 +329,14 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
                             placeholder="请输入你的电子邮箱"
                             type="email"
                             onInput={onFormFieldChange('email')}
+                            disabled={Boolean(touristProfile)}
                             append={
-                                <Button disabled={!formData.captchaCode || !formData.email} onClick={sendEmailVerify}>
-                                    发送验证码
+                                <Button
+                                    disabled={!formData.captchaCode || !formData.email || current.total > 0}
+                                    onClick={sendEmailVerify}
+                                >
+                                    {current.total > 0 ? '已发送' : '发送验证码'}
+                                    {current.total > 0 ? `(${current.seconds}s)` : ''}
                                 </Button>
                             }
                         />
