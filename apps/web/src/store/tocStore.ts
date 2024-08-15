@@ -1,4 +1,4 @@
-import { get } from '@/utils/request';
+import { getRepoToc } from '@/api/repo/toc';
 import { Toc, TocType } from '@swai/types';
 import { action, computed, observable, runInAction } from 'mobx';
 
@@ -29,7 +29,7 @@ function useTocStore() {
         state.loading = true;
         menus.length = 0;
         titleMap.clear();
-        get<Toc[]>('/api/v1/repo/getToc')
+        getRepoToc()
             .then((res) => {
                 runInAction(() => {
                     initData(res);

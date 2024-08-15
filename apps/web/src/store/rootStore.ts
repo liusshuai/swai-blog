@@ -1,4 +1,4 @@
-import { get } from '@/utils/request';
+import { getRepoDetail } from '@/api/repo/detail';
 import { UserInfo } from '@swai/types';
 import { observable, runInAction } from 'mobx';
 
@@ -18,11 +18,7 @@ function useRootStore() {
 
     runInAction(() => {
         if (state.userInfo === null) {
-            get<{
-                items_count: number;
-                namespace: string;
-                user: any;
-            }>('/api/v1/repo/getRepoDetail').then((res) => {
+            getRepoDetail().then((res) => {
                 const { user, items_count, namespace } = res;
                 runInAction(() => {
                     state.userInfo = {

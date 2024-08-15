@@ -2,12 +2,13 @@
 import { Button, Dialog, Drawer, Form, Input, useMobileMediaQuery } from '@swai/ui';
 import { observer } from 'mobx-react-lite';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import touristStore from '../../store/touristStore';
+import touristStore from '@/store/touristStore';
 import CaptchaSVG from './CaptchaSVG';
-import { post } from '@/utils/request';
 import { DEFAULT_AVATAR_SEARCH, DEFAULT_AVATAR_STYLE, createDiceBearAvatar } from '@/utils/diceBearAvatar';
 import type { DrawerProps } from '@swai/ui/lib/Drawer/Drawer';
 import type { DialogProps } from '@swai/ui/lib/Dialog/Dialog';
+import { emailVerify } from '@/api/tourist/emailVerify';
+import { findByEmail, register } from '@/api/tourist/register';
 
 const EXPLAIN_DATA = {
     styleName: '',
@@ -120,6 +121,7 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
         setFormError({
             ...EXPLAIN_DATA,
         });
+        setEditType('register');
     }
 
     function createAvatar() {
@@ -139,44 +141,39 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
         const valid = formRef.current && formRef.current.checkValidity();
         if (valid) {
             setSubmitting(true);
-            (editType === 'register' ? doRegisterTourist : doFindTourist)().finally(() => {
-                setSubmitting(false);
-            });
+            (editType === 'register' ? doRegisterTourist : doFindTourist)()
+                .then((res) => {
+                    onCloseEdit();
+
+                    store.setTouristProfile(res);
+                })
+                .catch((e) => {
+                    console.error('get some error: ', e.message);
+                })
+                .finally(() => {
+                    setSubmitting(false);
+                });
         } else {
             console.error('表单校验未通过');
         }
     }
 
     function doRegisterTourist() {
-        return post('/api/v1/tourist/register', {
+        return register({
             email: formData.email,
             nickname: formData.nickname,
             website: formData.userSite,
             verifyCode: formData.verifyCode,
             avatar_style: formData.styleName,
             avatar_search: formData.search,
-        })
-            .then((res) => {
-                console.log(res, '===tourist info');
-                onCloseEdit();
-            })
-            .catch((e) => {
-                console.error('get some error: ', e.message);
-            });
+        });
     }
 
     function doFindTourist() {
-        return post('/api/v1/tourist/findByEmail', {
+        return findByEmail({
             email: formData.email,
             verifyCode: formData.verifyCode,
-        })
-            .then((res) => {
-                console.log(res, '===tourist info');
-                onCloseEdit();
-            })
-            .catch((e) => {
-                console.error('get some error: ', e.message);
-            });
+        });
     }
 
     function formActionsRender() {
@@ -198,13 +195,22 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
         );
     }
 
+    function sendEmailVerify() {
+        emailVerify({
+            code: formData.captchaCode,
+            email: formData.email,
+        }).then((res) => {
+            console.log(res);
+        });
+    }
+
     function formRender() {
         return (
             <>
                 {touristProfile ? null : (
                     <div className="mb-4">
                         <Button color="secondary" onClick={onEditTypeChange}>
-                            {editType === 'login' ? '我是首次访问' : '我已留存过邮箱'}
+                            {editType === 'login' ? '我未订阅该站点' : '我订阅过该站点'}
                         </Button>
                     </div>
                 )}
@@ -307,7 +313,11 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
                             placeholder="请输入你的电子邮箱"
                             type="email"
                             onInput={onFormFieldChange('email')}
-                            append={<Button>发送验证码</Button>}
+                            append={
+                                <Button disabled={!formData.captchaCode || !formData.email} onClick={sendEmailVerify}>
+                                    发送验证码
+                                </Button>
+                            }
                         />
                     </Form.Item>
                     <Form.Item

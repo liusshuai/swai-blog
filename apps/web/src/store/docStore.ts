@@ -1,4 +1,4 @@
-import { get } from '@/utils/request';
+import { getArticleList } from '@/api/article/list';
 import { Doc } from '@swai/types';
 import { action, observable, runInAction } from 'mobx';
 
@@ -19,7 +19,7 @@ function useDocStore() {
         if (state.loading || state.isEnd) return Promise.resolve([]);
 
         state.loading = true;
-        return get<{ list: Doc[]; page: string }>('/api/v1/doc/getList', { page: state.currentPage.toString() })
+        return getArticleList({ page: state.currentPage })
             .then((res) => {
                 const { list = [] } = res;
                 runInAction(() => {

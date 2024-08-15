@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { LikeDarkIcon, LikeIcon } from '@swai/icon';
-import { post } from '@/utils/request';
 import { observer } from 'mobx-react-lite';
 import touristStore from '@/store/touristStore';
+import { likeArticle, unLikeArticle } from '@/api/article/like';
 
 interface LikedDataRowProps {
     docId: number;
@@ -21,29 +21,21 @@ const LikedDataRow = observer((props: LikedDataRowProps & { store: typeof touris
     }, [store.state.likedDocs, docId]);
 
     function changeDocLikeState() {
+        if (!store.state.profile) {
+            store.setEditDialogVisible(true);
+            return;
+        }
         if (liked) {
-            return unLikeArticle().then(() => {
+            return unLikeArticle(docId).then(() => {
                 store.unLikeDoc(docId);
                 props.onReduce && props.onReduce();
             });
         } else {
-            return likeArticle().then(() => {
+            return likeArticle(docId).then(() => {
                 store.likeDoc(docId);
                 props.onAdd && props.onAdd();
             });
         }
-    }
-
-    function likeArticle() {
-        return post('/api/v1/doc/like', {
-            docId,
-        });
-    }
-
-    function unLikeArticle() {
-        return post('/api/v1/doc/unLike', {
-            docId,
-        });
     }
 
     return React.createElement(liked ? LikeDarkIcon : LikeIcon, {

@@ -9,6 +9,7 @@ import './style.scss';
 import Link from 'next/link';
 import { observer } from 'mobx-react-lite';
 import rootStore from '../../store/rootStore';
+import { searchArticle } from '@/api/article/list';
 
 const SearchResultPage = observer(({ store }: { store: typeof rootStore }) => {
     const searchParams = useSearchParams();
@@ -20,7 +21,10 @@ const SearchResultPage = observer(({ store }: { store: typeof rootStore }) => {
             setResult([]);
         } else {
             const namespace = store.state.namespace;
-            get<DocSearchResult[]>('/api/v1/doc/search', { keyword, namespace }).then((res) => {
+            searchArticle({
+                keyword,
+                namespace,
+            }).then((res) => {
                 console.log(res);
                 setResult(res);
             });

@@ -1,5 +1,6 @@
+import { getTouristLikedArticles } from '@/api/article/like';
+import { getTouristInfo } from '@/api/tourist/register';
 import { DEFAULT_TOURIST_AVATAR, createDiceBearAvatar } from '@/utils/diceBearAvatar';
-import { get } from '@/utils/request';
 import { TouristProfile } from '@swai/types';
 import { computed, observable, runInAction } from 'mobx';
 
@@ -33,7 +34,7 @@ function useTouristStore() {
     }
 
     function getTouristLikedDocs() {
-        get<number[]>('/api/v1/tourist/getLikedDocIds').then((data) => {
+        getTouristLikedArticles().then((data) => {
             runInAction(() => {
                 state.likedDocs = data;
             });
@@ -61,7 +62,7 @@ function useTouristStore() {
     }
 
     function getTouristProfile() {
-        get<TouristProfile>('/api/v1/tourist/getTouristInfo').then((data) => {
+        getTouristInfo().then((data) => {
             setTouristProfile(data);
             getTouristLikedDocs();
         });

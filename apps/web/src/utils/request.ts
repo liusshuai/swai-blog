@@ -1,9 +1,9 @@
-export function get<T>(api: string, params?: Record<string, string | number>) {
+export function get<T>(api: string, params?: Record<string, any>) {
     const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${api}`);
 
     if (params) {
         for (const k in params) {
-            url.searchParams.append(k, params[k] + '');
+            url.searchParams.append(k, JSON.stringify(params[k]));
         }
     }
 
@@ -17,9 +17,9 @@ export function get<T>(api: string, params?: Record<string, string | number>) {
                     .then((data) => {
                         resolve(data.data);
                     })
-                    .catch(reject);
+                    .catch((e) => errorHandler(e, reject));
             })
-            .catch(reject);
+            .catch((e) => errorHandler(e, reject));
     });
 }
 
@@ -41,11 +41,17 @@ export function post<T>(api: string, data?: Record<string, any>) {
                         if (data.code === 200) {
                             resolve(data.data);
                         } else {
-                            reject(new Error(data.msg));
+                            errorHandler(new Error(data.msg), reject);
                         }
                     })
-                    .catch(reject);
+                    .catch((e) => errorHandler(e, reject));
             })
-            .catch(reject);
+            .catch((e) => errorHandler(e, reject));
     });
+}
+
+function errorHandler(e: Error, reject: (reason?: any) => void) {
+    alert(e.message);
+
+    reject(e);
 }

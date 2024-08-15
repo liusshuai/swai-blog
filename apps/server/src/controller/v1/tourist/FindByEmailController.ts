@@ -4,6 +4,7 @@ import { AssertParams, AsyncRouteController, RouteController, RouteControllerRes
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
 import { setTouristCookies } from '@/utils/cookies';
+import { checkEmailCode } from '@/utils/checkEmailCode';
 
 interface FindByEmailControllerParams {
     email: string;
@@ -19,9 +20,8 @@ class FindByEmailController implements AsyncRouteController<FindByEmailControlle
         params: FindByEmailControllerParams,
         ctx: Context,
     ): Promise<RouteControllerResult<TouristProfile | null>> {
-        if (params.verifyCode !== '1234') {
-            throw new Error('邮箱验证码已过期或错误，请稍后重试');
-        }
+        checkEmailCode(ctx, { email: params.email, code: params.verifyCode });
+        ctx.session!.emailVerify = null;
 
         const touristRepo = AppDataSource.getRepository(Tourist);
         const tourist = await touristRepo.findOneBy({

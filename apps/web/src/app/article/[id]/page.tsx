@@ -1,12 +1,12 @@
 import { Button } from '@swai/ui';
-import { get } from '@/utils/request';
 import type { DocDetail } from '@swai/types';
 import Empty from '@/components/common/Empty';
 import ArticleDetail from '@/components/article/ArticleDetail';
 import Link from 'next/link';
+import { getDetail } from '@/api/article/detail';
 
 export default async function DocDetail({ params }: { params: { id: string } }) {
-    const detail = await get<DocDetail>('/api/v1/doc/getDetail', { id: params.id });
+    const detail = await getDetail(params.id);
 
     return detail ? (
         <ArticleDetail detail={detail} />

@@ -5,6 +5,7 @@ import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
 import { TOURIST_UUID_KEY } from '@/common/constant';
 import { setTouristCookies } from '@/utils/cookies';
+import { checkEmailCode } from '@/utils/checkEmailCode';
 
 interface RegisterControllerParams {
     email: string;
@@ -20,9 +21,8 @@ interface RegisterControllerParams {
 })
 class RegisterController implements AsyncRouteController<RegisterControllerParams, TouristProfile> {
     async execute(params: RegisterControllerParams, ctx: Context): Promise<RouteControllerResult<TouristProfile>> {
-        if (params.verifyCode !== '1234') {
-            throw new Error('邮箱验证码已过期或错误，请稍后重试');
-        }
+        checkEmailCode(ctx, { email: params.email, code: params.verifyCode });
+        ctx.session!.emailVerify = null;
 
         const touristRepo = AppDataSource.getRepository(Tourist);
         const tourist = await touristRepo.findOneBy({

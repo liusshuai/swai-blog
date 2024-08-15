@@ -1,5 +1,6 @@
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
+import { checkEmailCode } from '@/utils/checkEmailCode';
 import { setTouristCookies } from '@/utils/cookies';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { Context } from 'koa';
@@ -15,16 +16,7 @@ interface LoginControllerParams {
 class LoginController implements AsyncRouteController<LoginControllerParams, true> {
     @AssertParams('email', 'code')
     async execute(params: LoginControllerParams, ctx: Context): Promise<RouteControllerResult<true>> {
-        const { email, code } = params;
-        const now = Date.now();
-        const verifyPayload = ctx.session!.emailVerify;
-        if (!verifyPayload || now - verifyPayload.timestamp > 30 * 60 * 1000) {
-            throw new Error('验证码已过期');
-        }
-
-        if (verifyPayload.email !== email || verifyPayload.code !== code) {
-            throw new Error('验证码错误');
-        }
+        checkEmailCode(ctx, params);
 
         ctx.session!.emailVerify = null;
 

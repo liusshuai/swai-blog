@@ -20,6 +20,7 @@ const UserDataOb = observer(({ store, tStore }: { store: typeof rootStore; tStor
         if (isFollowed) {
             openConfirmDialog({
                 children: '取消订阅后，有新文章将不会有邮件通知，但评论回复仍会收到通知，是否确认取消订阅？',
+                width: '420px',
                 onConfirm: () => {
                     console.log('取消订阅');
                 },
