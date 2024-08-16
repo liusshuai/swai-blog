@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import rootStore from '../../store/rootStore';
 import touristStore from '../../store/touristStore';
 import { DoneAllIcon, RssIcon } from '@swai/icon';
+import Link from 'next/link';
 
 const UserDataOb = observer(({ store, tStore }: { store: typeof rootStore; tStore: typeof touristStore }) => {
     const isFollowed = useMemo(() => {
@@ -64,8 +65,10 @@ const UserDataOb = observer(({ store, tStore }: { store: typeof rootStore; tStor
                         文章
                     </Typography>
                 </div>
-                <div className="text-center cursor-not-allowed">
-                    <Typography type="subtitle">{store.state.boardNum}</Typography>
+                <div className="text-center">
+                    <Typography type="subtitle">
+                        <Link href={'/board'}>{store.state.boardNum}</Link>
+                    </Typography>
                     <Typography type="helper" className="text-xs">
                         留言
                     </Typography>

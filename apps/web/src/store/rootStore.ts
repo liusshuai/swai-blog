@@ -1,3 +1,4 @@
+import { getAuthInfo } from '@/api/repo/auth';
 import { getRepoDetail } from '@/api/repo/detail';
 import { UserInfo } from '@swai/types';
 import { observable, runInAction } from 'mobx';
@@ -17,28 +18,32 @@ function useRootStore() {
     });
 
     runInAction(() => {
-        if (state.userInfo === null) {
+        if (state.namespace === '') {
             getRepoDetail().then((res) => {
-                const { user, items_count, namespace } = res;
+                const { items_count, namespace } = res;
                 runInAction(() => {
-                    state.userInfo = {
-                        nickname: user.name,
-                        avatar: user.avatar_url,
-                        slogan: user.description,
-                        follower: user.followers_count,
-                        docCount: items_count,
-                        boardCount: 0,
-                    };
                     state.namespace = namespace;
                     state.docNum = items_count;
-                    state.boardNum = 0;
                 });
+            });
+        }
+        if (state.userInfo === null) {
+            getAuthInfo().then((res) => {
+                state.userInfo = res;
+                state.boardNum = res.boardCount;
             });
         }
     });
 
+    function updateBoardNum(num: number) {
+        runInAction(() => {
+            state.boardNum = num;
+        });
+    }
+
     return {
         state,
+        updateBoardNum,
     };
 }
 

@@ -7,7 +7,7 @@ import Drawer, { DrawerProps } from '@swai/ui/lib/Drawer/Drawer';
 import { DialogProps } from '@swai/ui/lib/Dialog/Dialog';
 import { getCommentReplies } from 'api/comment/getComment';
 
-export default function () {
+export default function (props: { emptyText?: string }) {
     const isMobile = useMobileMediaQuery();
     const { comments = [] } = useContext(CommentContext);
     const [openReplies, setOpenReplies] = useState<boolean>(false);
@@ -43,25 +43,29 @@ export default function () {
 
     return (
         <div className="mt-5">
-            {comments.map((comment) => (
-                <CommentItem mainId={comment.id} comment={comment} key={comment.id}>
-                    {comment ? (
-                        <>
-                            {(comment.replies || []).map((reply) => (
-                                <CommentItem mainId={comment.id} comment={reply} key={reply.id} />
-                            ))}
-                            {comment.replyCount > 2 ? (
-                                <button
-                                    className="text-xs text-link hover:text-link-hover"
-                                    onClick={() => viewAllReply(comment)}
-                                >
-                                    查看全部{comment.replyCount}条回复
-                                </button>
-                            ) : null}
-                        </>
-                    ) : null}
-                </CommentItem>
-            ))}
+            {comments.length > 0 ? (
+                comments.map((comment) => (
+                    <CommentItem mainId={comment.id} comment={comment} key={comment.id}>
+                        {comment ? (
+                            <>
+                                {(comment.replies || []).map((reply) => (
+                                    <CommentItem mainId={comment.id} comment={reply} key={reply.id} />
+                                ))}
+                                {comment.replyCount > 2 ? (
+                                    <button
+                                        className="text-xs text-link hover:text-link-hover"
+                                        onClick={() => viewAllReply(comment)}
+                                    >
+                                        查看全部{comment.replyCount}条回复
+                                    </button>
+                                ) : null}
+                            </>
+                        ) : null}
+                    </CommentItem>
+                ))
+            ) : props.emptyText ? (
+                <p className="h-12 flex justify-center items-center text-helper">{props.emptyText}</p>
+            ) : null}
 
             {React.createElement<DrawerProps & DialogProps>(
                 isMobile ? Drawer : Dialog,

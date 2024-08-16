@@ -6,8 +6,7 @@ import { CommentReply } from './CommentReply';
 @Entity()
 export class ContentComment extends BaseComment {
     @Column({
-        comment: '评论的内容ID，可为null，为null表示留言板的留言',
-        nullable: true,
+        comment: '评论的内容ID，，为0表示留言板的留言',
     })
     contentId!: number;
 

@@ -3,7 +3,7 @@ import { AppDataSource } from '@/common/database';
 import { CommentReply } from '@/entity/CommentReply';
 import { ContentComment } from '@/entity/ContentComment';
 import { Tourist } from '@/entity/Tourist';
-import type { Repository } from 'typeorm';
+import type { FindOptionsWhere, Repository } from 'typeorm';
 
 export interface AddCommentPayload {
     fromId: string;
@@ -45,6 +45,8 @@ export class CommentRepository {
                 throw new Error('missing required param: contentId');
             }
             comment.contentId = contentId;
+        } else {
+            comment.contentId = 0;
         }
 
         await this.commentRepo.save(comment);
@@ -54,10 +56,11 @@ export class CommentRepository {
 
     static async getComments(type: CommentType, payload: GetCommentsPayload) {
         const { contentId, page, pageSize = 10 } = payload;
-        const comments = await this.commentRepo.find({
+
+        const [comments, count] = await this.commentRepo.findAndCount({
             where: {
                 type,
-                contentId,
+                contentId: type === CommentType.BOADR ? 0 : contentId,
                 visible: true,
                 is_deleted: false,
             },
@@ -108,7 +111,10 @@ export class CommentRepository {
         //     .skip((page - 1) * pageSize)
         //     .getMany();
 
-        return comments;
+        return {
+            comments,
+            count,
+        };
     }
 
     static async addReply(commentId: number, payload: { content: string; from: string; to: string }) {
@@ -147,13 +153,13 @@ export class CommentRepository {
             .getManyAndCount();
     }
 
-    static async getContentCommentCount(type: CommentType, contentId: number): Promise<number> {
+    static async getContentCommentCount(type: CommentType, contentId?: number): Promise<number> {
         const result = await AppDataSource.createQueryBuilder()
             .select('comment.id', 'commentId')
             .addSelect('COUNT(DISTINCT reply.id)', 'replyCount')
             .from(ContentComment, 'comment')
             .leftJoin('comment.replies', 'reply', 'reply.visible = 1 AND reply.is_deleted = 0')
-            .where('comment.contentId = :contentId', { contentId })
+            .where('comment.contentId = :contentId', { contentId: type === CommentType.BOADR ? 0 : contentId })
             .andWhere('comment.type = :type', { type })
             .andWhere('comment.visible = 1')
             .andWhere('comment.is_deleted = 0')
