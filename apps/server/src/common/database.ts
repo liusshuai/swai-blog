@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
     password: database.password,
     database: database.database,
     port: 3306,
-    entities: [path.join(__dirname, '../entity/*.ts')],
+    entities: [path.join(__dirname, '../entity/*.{ts,js}')],
     synchronize: true,
 });
 
