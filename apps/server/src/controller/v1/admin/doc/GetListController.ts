@@ -6,7 +6,6 @@ import { pick } from 'lodash';
 import { AppDataSource } from '@/common/database';
 import { DocLiked } from '@/entity/DocLIked';
 import { CommentRepository } from '@/utils/CommentRepository';
-import { runtimeLogger } from '@/utils/Logger';
 import { NeedAdmin } from '@/annotation/NeedAdmin';
 
 interface GetDocListControllerParams {

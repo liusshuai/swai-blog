@@ -4,8 +4,8 @@
     "serve": "turbo run serve",
     "serve:app": "turbo run serve --filter=!admin",
     "serve:admin": "turbo run serve --filter=!web",
-    "build:app": "turbo run build --filter=ui --filter=icon --filter=web",
-    "build:server": "turbo run build --filter=route-controller --filter=server",
+    "build:app": "turbo run build --filter=types --filter=ui --filter=icon --filter=web",
+    "build:server": "turbo run build --filter=types --filter=route-controller --filter=server",
     "test": "vitest",
     "lint:fix": "prettier ./packages/ ./apps --write"
   },
