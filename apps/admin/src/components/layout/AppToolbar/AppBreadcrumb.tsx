@@ -7,11 +7,11 @@ export default () => {
                 source={[
                     {
                         name: '首页',
-                        to: '/',
+                        path: '/',
                     },
                     {
                         name: '工作台',
-                        to: '/dashboard',
+                        path: '/dashboard',
                     },
                 ]}
             />
