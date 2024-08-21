@@ -10,6 +10,8 @@ class GetController implements AsyncRouteController<void, string> {
             width: 120,
             height: 30,
             fontSize: 42,
+            noise: 2,
+            charPreset: '0123456789',
         });
 
         ctx.session!.captcha = captcha.text.toLowerCase();
