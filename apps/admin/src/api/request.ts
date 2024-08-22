@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const request = axios.create({
-    baseURL: import.meta.env.PROD ? '//api.lsshuaisl.com' : '//localhost:3001',
+    baseURL: import.meta.env.PROD ? 'http://api.lsshuaisl.com' : 'http://localhost:3001',
     headers: {
         device: 'app',
     },
