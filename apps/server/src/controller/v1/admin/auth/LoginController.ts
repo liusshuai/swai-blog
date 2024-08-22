@@ -4,6 +4,7 @@ import { checkEmailCode } from '@/utils/checkEmailCode';
 import { setTouristCookies } from '@/utils/cookies';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { Context } from 'koa';
+import config from '@/common/serverConfig';
 
 interface LoginControllerParams {
     email: string;
@@ -18,8 +19,13 @@ class LoginController implements AsyncRouteController<LoginControllerParams, tru
     async execute(params: LoginControllerParams, ctx: Context): Promise<RouteControllerResult<true>> {
         checkEmailCode(ctx, params);
 
+        const admin = config.get('admin');
+
         ctx.session!.emailVerify = null;
 
+        if (params.email !== admin.email) {
+            throw new Error('Not an administrator account');
+        }
         const touristRepo = AppDataSource.getRepository(Tourist);
         let tourist = await touristRepo.findOneBy({
             email: params.email,
@@ -27,7 +33,7 @@ class LoginController implements AsyncRouteController<LoginControllerParams, tru
         if (!tourist) {
             tourist = new Tourist();
             tourist.email = params.email;
-            tourist.nickname = 'LSSHUAISL(Admin)';
+            tourist.nickname = admin.nickname || 'LSSHUAISL(Admin)';
             tourist.website = 'https://www.lsshuaisl.com';
             tourist.avatar_style = '';
             tourist.avatar_search = '';

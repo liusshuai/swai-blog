@@ -99,7 +99,7 @@ export function useCountDown(options: useCountDownOptions) {
 
     function reset(time?: number) {
         clearTimer();
-        setTime(time || options.time);
+        setTime(time !== undefined ? time : options.time);
         setStarted(true);
     }
 

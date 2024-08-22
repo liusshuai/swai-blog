@@ -1,10 +1,12 @@
 import { UserInfo } from '@swai/types';
 import { get, post } from './request';
 
-export function sendEmailVerifyCode(email: string) {
-    return post<boolean>('/api/v1/mailer/emailVerify', {
-        email,
-    });
+export function getCaptchaCode() {
+    return get<string>('/api/v1/captcha/get');
+}
+
+export function sendEmailVerifyCode(params: { email: string; code: string }) {
+    return post<boolean>('/api/v1/mailer/emailVerify', params);
 }
 
 interface LoginParams {

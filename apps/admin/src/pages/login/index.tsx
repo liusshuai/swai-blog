@@ -1,22 +1,29 @@
-import { Button, Card, Form, Input } from '@swai/ui';
+import { Button, Card, Form, Input, useCountDown } from '@swai/ui';
 import logo from '@/assets/images/logo.png';
 import './index.less';
 import { FormEvent, useRef, useState } from 'react';
 import { login, sendEmailVerifyCode } from '../../api/login';
 import { useNavigate } from 'react-router-dom';
+import CaptchaSVG from '../../components/common/CaptchaSVG';
 
 export default () => {
     const navigate = useNavigate();
+
+    const { current, reset } = useCountDown({
+        time: 0,
+    });
 
     const formRef = useRef<HTMLFormElement | null>(null);
     const [formData, setFormData] = useState({
         email: '',
         verifyCode: '',
+        captchaCode: '',
     });
 
     const [formError, setFormError] = useState({
         email: '',
         verifyCode: '',
+        captchaCode: '',
     });
 
     function onFiledInvalid(filed: keyof typeof formError) {
@@ -46,8 +53,11 @@ export default () => {
 
     function onSendEmail() {
         if (formData.email) {
-            sendEmailVerifyCode(formData.email).then((res) => {
-                console.log(res);
+            sendEmailVerifyCode({
+                email: formData.email,
+                code: formData.captchaCode,
+            }).then(() => {
+                reset(60_000);
             });
         }
     }
@@ -58,9 +68,13 @@ export default () => {
             login({
                 email: formData.email,
                 code: formData.verifyCode,
-            }).then(() => {
-                navigate('/', { replace: true });
-            });
+            })
+                .then(() => {
+                    navigate('/', { replace: true });
+                })
+                .catch(() => {
+                    reset(0);
+                });
     }
 
     return (
@@ -68,6 +82,20 @@ export default () => {
             <Card className="w-[400px] mx-auto">
                 <img className="w-auto h-16 mx-auto mb-10" src={logo} alt="" />
                 <Form ref={formRef} size="large">
+                    <Form.Item
+                        required
+                        name="captchaCode"
+                        label="验证码"
+                        error={formError.captchaCode}
+                        onInvalid={onFiledInvalid('captchaCode')}
+                    >
+                        <Input
+                            value={formData.captchaCode}
+                            onInput={onFormFieldChange('captchaCode')}
+                            placeholder="请输入验证码"
+                            append={<CaptchaSVG />}
+                        />
+                    </Form.Item>
                     <Form.Item
                         required
                         name="email"
@@ -81,8 +109,9 @@ export default () => {
                             type="email"
                             onInput={onFormFieldChange('email')}
                             append={
-                                <Button disabled={!formData.email} onClick={onSendEmail}>
-                                    发送验证码
+                                <Button disabled={!formData.email || !formData.captchaCode} onClick={onSendEmail}>
+                                    {current.total > 0 ? '已发送' : '发送验证码'}
+                                    {current.total > 0 ? `(${current.seconds}s)` : ''}
                                 </Button>
                             }
                         />

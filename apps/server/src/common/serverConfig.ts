@@ -21,4 +21,8 @@ export default new ServerConfig({
         username: '',
         password: '',
     },
+    admin: {
+        email: '',
+        nickname: '',
+    },
 });
