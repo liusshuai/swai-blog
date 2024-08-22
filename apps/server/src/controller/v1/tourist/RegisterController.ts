@@ -41,7 +41,8 @@ class RegisterController implements AsyncRouteController<RegisterControllerParam
 
         await touristRepo.save(newTourist);
 
-        setTouristCookies(ctx, newTourist.id);
+        ctx.session!.UUID = newTourist.uuid;
+        setTouristCookies(ctx, newTourist.uuid);
 
         return new RouteControllerResult(newTourist);
     }

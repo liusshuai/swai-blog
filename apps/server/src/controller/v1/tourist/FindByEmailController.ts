@@ -34,7 +34,8 @@ class FindByEmailController implements AsyncRouteController<FindByEmailControlle
 
         await touristRepo.save(tourist);
 
-        setTouristCookies(ctx, tourist.id);
+        ctx.session!.UUID = tourist.uuid;
+        setTouristCookies(ctx, tourist.uuid);
 
         return new RouteControllerResult(tourist);
     }

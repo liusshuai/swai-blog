@@ -5,13 +5,13 @@ import { Tourist } from '@/entity/Tourist';
 import { NeedAdmin } from '@/annotation/NeedAdmin';
 
 interface ChangeStateControllerParams {
-    id: string;
+    id: number;
     un_followed?: boolean;
     is_black?: boolean;
 }
 
 interface ChangeStateControllerResponse {
-    id: string;
+    id: number;
     success: boolean;
 }
 

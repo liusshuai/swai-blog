@@ -14,7 +14,7 @@ app.use(
     session(
         {
             key: app.keys[0],
-            maxAge: 86400000,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 一周
         },
         app,
     ),

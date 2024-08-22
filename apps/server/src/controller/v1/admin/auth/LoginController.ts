@@ -41,9 +41,9 @@ class LoginController implements AsyncRouteController<LoginControllerParams, tru
             await touristRepo.save(tourist);
         }
 
-        ctx.session!.UUID = tourist.id;
-        ctx.session!.ADMIN_UUID = tourist.id;
-        setTouristCookies(ctx, tourist.id);
+        ctx.session!.UUID = tourist.uuid;
+        ctx.session!.ADMIN_UUID = tourist.uuid;
+        setTouristCookies(ctx, tourist.uuid);
 
         return new RouteControllerResult(true);
     }

@@ -8,18 +8,18 @@ import { DocLiked } from '@/entity/DocLIked';
 @RouteController()
 class GetTouristLikedDocIdsController implements AsyncRouteController<void, number[]> {
     async execute(params: void, ctx: Context): Promise<RouteControllerResult<number[]>> {
-        const touristId = ctx.cookies.get(TOURIST_UUID_KEY);
-        if (touristId) {
+        const touristUUID = ctx.cookies.get(TOURIST_UUID_KEY);
+        if (touristUUID) {
             const touristRepo = AppDataSource.getRepository(Tourist);
             const visitor = await touristRepo.findOneBy({
-                id: touristId,
+                uuid: touristUUID,
             });
 
             if (visitor) {
                 const docLikedRepo = AppDataSource.getRepository(DocLiked);
                 const records = await docLikedRepo.find({
                     where: {
-                        vuid: visitor.id,
+                        vuid: visitor.uuid,
                     },
                 });
                 return new RouteControllerResult(records.map((record) => record.docId));

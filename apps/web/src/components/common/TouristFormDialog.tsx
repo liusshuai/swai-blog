@@ -154,6 +154,7 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
                 })
                 .catch((e) => {
                     console.error('get some error: ', e.message);
+                    reset(0);
                 })
                 .finally(() => {
                     setSubmitting(false);

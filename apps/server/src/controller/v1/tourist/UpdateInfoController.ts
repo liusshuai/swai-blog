@@ -25,10 +25,10 @@ class UpdateInfoController implements AsyncRouteController<UpdateInfoControllerP
         checkEmailCode(ctx, { email: params.email, code: params.verifyCode });
         ctx.session!.emailVerify = null;
 
-        const uid = ctx.cookies.get(TOURIST_UUID_KEY);
+        const uuid = ctx.cookies.get(TOURIST_UUID_KEY);
         const touristRepo = AppDataSource.getRepository(Tourist);
         const tourist = await touristRepo.findOneBy({
-            id: uid,
+            uuid,
             email: params.email,
         });
 

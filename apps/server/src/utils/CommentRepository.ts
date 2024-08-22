@@ -3,7 +3,7 @@ import { AppDataSource } from '@/common/database';
 import { CommentReply } from '@/entity/CommentReply';
 import { ContentComment } from '@/entity/ContentComment';
 import { Tourist } from '@/entity/Tourist';
-import type { FindOptionsWhere, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 export interface AddCommentPayload {
     fromId: string;
@@ -22,8 +22,10 @@ export class CommentRepository {
     static commentRepo = AppDataSource.getRepository(ContentComment);
     static replyRepo = AppDataSource.getRepository(CommentReply);
 
-    static async getTourist(vuid: string): Promise<Tourist> {
-        const tourist = await this.touristRepo.findOneBy({ id: vuid });
+    static async getTourist(uuid: string | number, key: 'id' | 'uuid' = 'uuid'): Promise<Tourist> {
+        const tourist = await this.touristRepo.findOneBy({
+            [key]: uuid,
+        });
         if (!tourist) {
             throw new Error('游客信息错误');
         }
@@ -57,19 +59,32 @@ export class CommentRepository {
     static async getComments(type: CommentType, payload: GetCommentsPayload) {
         const { contentId, page, pageSize = 10 } = payload;
 
-        const [comments, count] = await this.commentRepo.findAndCount({
-            where: {
-                type,
-                contentId: type === CommentType.BOADR ? 0 : contentId,
-                visible: true,
-                is_deleted: false,
-            },
-            take: pageSize,
-            skip: (page - 1) * pageSize,
-            order: {
-                create_at: 'DESC',
-            },
-        });
+        // const [comments, count] = await this.commentRepo.findAndCount({
+        //     where: {
+        //         type,
+        //         contentId: type === CommentType.BOADR ? 0 : contentId,
+        //         visible: true,
+        //         is_deleted: false,
+        //     },
+        //     take: pageSize,
+        //     skip: (page - 1) * pageSize,
+        //     order: {
+        //         create_at: 'DESC',
+        //     },
+        // });
+
+        const [comments, count] = await this.commentRepo
+            .createQueryBuilder('comment')
+            .where('comment.type = :type', { type })
+            .andWhere('comment.contentId = :contentId', { contentId: type === CommentType.BOADR ? 0 : contentId })
+            .andWhere('comment.visible = 1')
+            .andWhere('comment.is_deleted = 0')
+            .leftJoinAndSelect('comment.from', 'from')
+            .select(['comment', 'from.id', 'from.nickname', 'from.avatar_style', 'from.avatar_search', 'from.website'])
+            .take(pageSize)
+            .skip((page - 1) * pageSize)
+            .orderBy('comment.create_at', 'DESC')
+            .getManyAndCount();
 
         for (const comment of comments) {
             const replies = await this.replyRepo
@@ -79,6 +94,19 @@ export class CommentRepository {
                 .andWhere('reply.is_deleted = 0')
                 .leftJoinAndSelect('reply.from', 'from')
                 .leftJoinAndSelect('reply.to', 'to')
+                .select([
+                    'reply',
+                    'from.id',
+                    'from.nickname',
+                    'from.avatar_style',
+                    'from.avatar_search',
+                    'from.website',
+                    'to.id',
+                    'to.nickname',
+                    'to.avatar_style',
+                    'to.avatar_search',
+                    'to.website',
+                ])
                 .take(2)
                 .orderBy('reply.create_at', 'DESC')
                 .getMany();
@@ -119,7 +147,7 @@ export class CommentRepository {
 
     static async addReply(commentId: number, payload: { content: string; from: string; to: string }) {
         const fromTourist = await this.getTourist(payload.from);
-        const toTourist = await this.getTourist(payload.to);
+        const toTourist = await this.getTourist(payload.to, 'id');
 
         const comment = await this.commentRepo.findOneBy({
             id: commentId,
@@ -171,14 +199,14 @@ export class CommentRepository {
         return total;
     }
 
-    private static async doCommentRemove(repo: Repository<ContentComment | CommentReply>, id: number, vuid: string) {
+    private static async doCommentRemove(repo: Repository<ContentComment | CommentReply>, id: number, uuid: string) {
         const row = await repo.findOneBy({ id });
 
         if (!row) {
             throw new Error(`can not find comment form id: ${id}`);
         }
 
-        if (row.from.id !== vuid) {
+        if (row.from.uuid !== uuid) {
             throw new Error(`no permission`);
         }
 

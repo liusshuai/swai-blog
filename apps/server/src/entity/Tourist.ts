@@ -1,10 +1,13 @@
 import { TouristEntity } from '@swai/types';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Tourist implements TouristEntity {
+    @PrimaryGeneratedColumn('increment')
+    id!: number;
+
     @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    uuid!: string;
 
     @Column({
         comment: '游客昵称',

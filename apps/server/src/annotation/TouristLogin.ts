@@ -6,8 +6,9 @@ export function TouristLogin() {
         const value = descriptor.value;
 
         descriptor.value = function (params: any, ctx: Context) {
+            const uuid = ctx.session!.UUID;
             const vuid = ctx.cookies.get(TOURIST_UUID_KEY);
-            if (!vuid) {
+            if (!uuid || uuid !== vuid) {
                 throw new Error('你必须先订阅该站点');
             }
 

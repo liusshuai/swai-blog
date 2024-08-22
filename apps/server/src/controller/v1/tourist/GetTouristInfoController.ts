@@ -8,11 +8,11 @@ import { TOURIST_UUID_KEY } from '@/common/constant';
 @RouteController()
 class GetTouristInfoController implements AsyncRouteController<void, TouristProfile | null> {
     async execute(params: void, ctx: Context): Promise<RouteControllerResult<TouristProfile | null>> {
-        const visitorId = ctx.cookies.get(TOURIST_UUID_KEY);
-        if (visitorId) {
+        const uuid = ctx.cookies.get(TOURIST_UUID_KEY);
+        if (uuid) {
             const touristRepo = AppDataSource.getRepository(Tourist);
             const visitor = await touristRepo.findOneBy({
-                id: visitorId,
+                uuid,
             });
 
             if (visitor) {
