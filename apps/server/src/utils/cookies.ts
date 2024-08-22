@@ -4,6 +4,6 @@ import { Context } from 'koa';
 export function setTouristCookies(ctx: Context, value: any) {
     ctx.cookies.set(TOURIST_UUID_KEY, value, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        // secure: process.env.NODE_ENV === 'production',
     });
 }
