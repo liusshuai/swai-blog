@@ -79,7 +79,7 @@ export default () => {
 
     return (
         <div className="login-page pt-[10%]">
-            <Card className="w-[400px] mx-auto">
+            <Card className="w-[420px] mx-auto">
                 <img className="w-auto h-16 mx-auto mb-10" src={logo} alt="" />
                 <Form ref={formRef} size="large">
                     <Form.Item
