@@ -1,5 +1,4 @@
 import { Context } from 'koa';
-import type { TouristProfile } from '@swai/types';
 import { AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
@@ -18,8 +17,8 @@ interface RegisterControllerParams {
 @RouteController({
     methods: 'post',
 })
-class RegisterController implements AsyncRouteController<RegisterControllerParams, TouristProfile> {
-    async execute(params: RegisterControllerParams, ctx: Context): Promise<RouteControllerResult<TouristProfile>> {
+class RegisterController implements AsyncRouteController<RegisterControllerParams, Tourist> {
+    async execute(params: RegisterControllerParams, ctx: Context): Promise<RouteControllerResult<Tourist>> {
         checkEmailCode(ctx, { email: params.email, code: params.verifyCode });
         ctx.session!.emailVerify = null;
 

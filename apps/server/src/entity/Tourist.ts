@@ -1,8 +1,7 @@
-import { TouristEntity } from '@swai/types';
-import { Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
-export class Tourist implements TouristEntity {
+export class Tourist {
     @PrimaryGeneratedColumn('increment')
     id!: number;
 

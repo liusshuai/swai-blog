@@ -1,6 +1,5 @@
 import { Context } from 'koa';
 import { AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
-import { TouristProfile } from '@swai/types';
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
 import { FindOptionsWhere, Like } from 'typeorm';
@@ -16,7 +15,7 @@ interface GetTouristListControllerParams {
 }
 
 interface GetTouristListControllerResponse {
-    list: TouristProfile[];
+    list: Tourist[];
     total: number;
 }
 

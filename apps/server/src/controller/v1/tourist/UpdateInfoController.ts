@@ -1,5 +1,4 @@
 import { Context } from 'koa';
-import type { TouristProfile } from '@swai/types';
 import { AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
@@ -19,9 +18,9 @@ interface UpdateInfoControllerParams {
 @RouteController({
     methods: 'post',
 })
-class UpdateInfoController implements AsyncRouteController<UpdateInfoControllerParams, TouristProfile> {
+class UpdateInfoController implements AsyncRouteController<UpdateInfoControllerParams, Tourist> {
     @TouristLogin()
-    async execute(params: UpdateInfoControllerParams, ctx: Context): Promise<RouteControllerResult<TouristProfile>> {
+    async execute(params: UpdateInfoControllerParams, ctx: Context): Promise<RouteControllerResult<Tourist>> {
         checkEmailCode(ctx, { email: params.email, code: params.verifyCode });
         ctx.session!.emailVerify = null;
 
