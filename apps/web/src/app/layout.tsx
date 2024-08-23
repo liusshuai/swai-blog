@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en" className="h-full overflow-hidden">
+        <html lang="en" className="mobile:min-w-full min-w-layout h-full overflow-hidden overflow-x-auto">
             <body className="h-full bg-page overflow-y-auto dark:bg-page-dark">
                 <AppHeader />
                 <main className="my-5 tablet:my-10">{children}</main>

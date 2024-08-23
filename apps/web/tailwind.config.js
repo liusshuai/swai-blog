@@ -10,6 +10,9 @@ module.exports = {
             width: {
                 layout: 'var(--layout-width)',
             },
+            minWidth: {
+                layout: 'var(--layout-width)',
+            },
             maxWidth: {
                 layout: 'var(--layout-width)',
             },
