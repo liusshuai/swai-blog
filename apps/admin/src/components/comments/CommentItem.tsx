@@ -57,7 +57,7 @@ export default (props: CommentItemProps) => {
             <div className="me-5 shrink-0">
                 <img
                     className={avatarClasses}
-                    src={`https://api.dicebear.com/8.x/${from.avatar_style}/svg${from.avatar_search ? `?${from.avatar_search}` : ''}`}
+                    src={`https://api.dicebear.com/9.x/${from.avatar_style}/svg${from.avatar_search ? `?${from.avatar_search}` : ''}`}
                     alt=""
                 />
             </div>

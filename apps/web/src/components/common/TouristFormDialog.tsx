@@ -187,7 +187,6 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
             email: formData.email,
             nickname: formData.nickname,
             website: formData.userSite,
-            verifyCode: formData.verifyCode,
             avatar_style: formData.styleName,
             avatar_search: formData.search,
         });
@@ -212,7 +211,9 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
         );
     }
 
-    function sendEmailVerify() {
+    function sendEmailVerify(e: any) {
+        e.preventDefault();
+        e.stopPropagation();
         emailVerify({
             code: formData.captchaCode,
             email: formData.email,
@@ -303,20 +304,22 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
                             </Form.Item>
                         </>
                     ) : null}
-                    <Form.Item
-                        required
-                        name="captchaCode"
-                        label="验证码"
-                        error={formError.captchaCode}
-                        onInvalid={onFiledInvalid('captchaCode')}
-                    >
-                        <Input
-                            value={formData.captchaCode}
-                            onInput={onFormFieldChange('captchaCode')}
-                            placeholder="请输入验证码"
-                            append={<CaptchaSVG />}
-                        />
-                    </Form.Item>
+                    {touristProfile ? null : (
+                        <Form.Item
+                            required
+                            name="captchaCode"
+                            label="验证码"
+                            error={formError.captchaCode}
+                            onInvalid={onFiledInvalid('captchaCode')}
+                        >
+                            <Input
+                                value={formData.captchaCode}
+                                onInput={onFormFieldChange('captchaCode')}
+                                placeholder="请输入验证码"
+                                append={<CaptchaSVG />}
+                            />
+                        </Form.Item>
+                    )}
                     <Form.Item
                         required
                         name="email"
@@ -332,29 +335,33 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
                             onInput={onFormFieldChange('email')}
                             disabled={Boolean(touristProfile)}
                             append={
-                                <Button
-                                    disabled={!formData.captchaCode || !formData.email || current.total > 0}
-                                    onClick={sendEmailVerify}
-                                >
-                                    {current.total > 0 ? '已发送' : '发送验证码'}
-                                    {current.total > 0 ? `(${current.seconds}s)` : ''}
-                                </Button>
+                                touristProfile ? null : (
+                                    <Button
+                                        disabled={!formData.captchaCode || !formData.email || current.total > 0}
+                                        onClick={sendEmailVerify}
+                                    >
+                                        {current.total > 0 ? '已发送' : '发送验证码'}
+                                        {current.total > 0 ? `(${current.seconds}s)` : ''}
+                                    </Button>
+                                )
                             }
                         />
                     </Form.Item>
-                    <Form.Item
-                        required
-                        name="verifyCode"
-                        label="邮箱验证码"
-                        error={formError.verifyCode}
-                        onInvalid={onFiledInvalid('verifyCode')}
-                    >
-                        <Input
-                            value={formData.verifyCode}
-                            placeholder="请输入邮箱验证码"
-                            onInput={onFormFieldChange('verifyCode')}
-                        />
-                    </Form.Item>
+                    {touristProfile ? null : (
+                        <Form.Item
+                            required
+                            name="verifyCode"
+                            label="邮箱验证码"
+                            error={formError.verifyCode}
+                            onInvalid={onFiledInvalid('verifyCode')}
+                        >
+                            <Input
+                                value={formData.verifyCode}
+                                placeholder="请输入邮箱验证码"
+                                onInput={onFormFieldChange('verifyCode')}
+                            />
+                        </Form.Item>
+                    )}
                     {editType === 'register' ? (
                         <Form.Item
                             name="site"

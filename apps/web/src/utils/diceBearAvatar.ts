@@ -1,6 +1,6 @@
 export function createDiceBearAvatar(styleName: string, options?: string) {
     if (styleName) {
-        return `https://api.dicebear.com/8.x/${styleName}/svg${options ? `?${options}` : ''}`;
+        return `https://api.dicebear.com/9.x/${styleName}/svg${options ? `?${options}` : ''}`;
     }
 
     return '';

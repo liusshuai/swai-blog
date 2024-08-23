@@ -21,6 +21,6 @@ export function getTouristInfo() {
     return get<TouristProfile>('/api/v1/tourist/getTouristInfo');
 }
 
-export function updateTouristInfo(params: TouristRegisterParams) {
+export function updateTouristInfo(params: Omit<TouristRegisterParams, 'verifyCode'>) {
     return post<TouristProfile>('/api/v1/tourist/updateInfo', params);
 }

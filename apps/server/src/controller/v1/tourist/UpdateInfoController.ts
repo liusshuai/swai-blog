@@ -3,14 +3,12 @@ import { AsyncRouteController, RouteController, RouteControllerResult } from '@s
 import { AppDataSource } from '@/common/database';
 import { Tourist } from '@/entity/Tourist';
 import { TOURIST_UUID_KEY } from '@/common/constant';
-import { checkEmailCode } from '@/utils/checkEmailCode';
 import { TouristLogin } from '@/annotation/TouristLogin';
 
 interface UpdateInfoControllerParams {
     email: string;
     nickname: string;
     website?: string;
-    verifyCode: string;
     avatar_style: string;
     avatar_search?: string;
 }
@@ -21,9 +19,6 @@ interface UpdateInfoControllerParams {
 class UpdateInfoController implements AsyncRouteController<UpdateInfoControllerParams, Tourist> {
     @TouristLogin()
     async execute(params: UpdateInfoControllerParams, ctx: Context): Promise<RouteControllerResult<Tourist>> {
-        checkEmailCode(ctx, { email: params.email, code: params.verifyCode });
-        ctx.session!.emailVerify = null;
-
         const uuid = ctx.cookies.get(TOURIST_UUID_KEY);
         const touristRepo = AppDataSource.getRepository(Tourist);
         const tourist = await touristRepo.findOneBy({

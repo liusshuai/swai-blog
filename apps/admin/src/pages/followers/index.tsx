@@ -42,7 +42,7 @@ export default () => {
                 return (
                     <img
                         className="w-16 h-16 mx-auto"
-                        src={`https://api.dicebear.com/8.x/${avatar_style}/svg${avatar_search ? `?${avatar_search}` : ''}`}
+                        src={`https://api.dicebear.com/9.x/${avatar_style}/svg${avatar_search ? `?${avatar_search}` : ''}`}
                         alt=""
                     />
                 );

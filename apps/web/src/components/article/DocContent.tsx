@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import hljs from 'highlight.js/lib/core';
 import typescript from 'highlight.js/lib/languages/typescript';
 import json from 'highlight.js/lib/languages/json';
@@ -10,7 +10,7 @@ hljs.registerLanguage('typescript', typescript);
 hljs.registerLanguage('javascript', typescript);
 hljs.registerLanguage('json', json);
 
-export default function DocDetail({ content, sourceUrl }: { content: string; sourceUrl: string }) {
+const DocDetail = memo(({ content, sourceUrl }: { content: string; sourceUrl: string }) => {
     useEffect(() => {
         hljs.highlightAll();
     }, [content]);
@@ -29,4 +29,6 @@ export default function DocDetail({ content, sourceUrl }: { content: string; sou
     }, [sourceUrl]);
 
     return <div className="doc-content" dangerouslySetInnerHTML={{ __html: content }}></div>;
-}
+});
+
+export default DocDetail;
