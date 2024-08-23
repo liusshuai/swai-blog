@@ -45,10 +45,6 @@ const TouristDialog = observer(({ store }: { store: typeof touristStore }) => {
     const touristProfile = useMemo(() => store.state.profile, [store.state.profile]);
 
     useEffect(() => {
-        console.log('是否是移动端？', isMobile);
-    }, [isMobile]);
-
-    useEffect(() => {
         if (store.state.openEditDialog) {
             if (store.state.profile) {
                 const { nickname, email, avatar_style, avatar_search = '', website = '' } = store.state.profile;

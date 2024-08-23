@@ -31,7 +31,7 @@ const SearchResultPage = observer(({ store }: { store: typeof rootStore }) => {
     useEffect(doSearch, [keyword]);
 
     return (
-        <div className="tablet:w-[790px] tablet:mx-auto">
+        <div className="tablet:container tablet:mx-auto">
             <Typography type="title" weight="light" className="px-2.5 mb-5 mobile:text-lg tablet:px-0">
                 根据关键字 <span className="text-brand font-semibold">{keyword}</span> 查询到以下
                 <span className="font-semibold">{result.length}</span>条结果：
