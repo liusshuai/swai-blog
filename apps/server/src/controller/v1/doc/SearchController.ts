@@ -6,15 +6,15 @@ import { DocSearchResult } from '@swai/types';
 
 interface SearchControllerParams {
     keyword: string;
-    namespace?: string;
+    page: number;
 }
 
 @RouteController()
 class SearchController implements AsyncRouteController<SearchControllerParams, DocSearchResult[]> {
     async execute(params: SearchControllerParams, ctx: Context): Promise<RouteControllerResult<DocSearchResult[]>> {
-        const { keyword, namespace } = params;
+        const { keyword, page = 1 } = params;
 
-        const data = (await yqsdk.searchDoc(keyword, namespace)).data;
+        const data = (await yqsdk.searchDoc(keyword, page)).data;
 
         return new RouteControllerResult(data.map((row) => pick(row, ['id', 'title', 'summary'])));
     }

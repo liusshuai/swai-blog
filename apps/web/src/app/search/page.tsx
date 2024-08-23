@@ -1,6 +1,5 @@
 'use client';
 
-import { get } from '@/utils/request';
 import { DocSearchResult } from '@swai/types';
 import { Card, Typography } from '@swai/ui';
 import { useSearchParams } from 'next/navigation';
@@ -20,10 +19,8 @@ const SearchResultPage = observer(({ store }: { store: typeof rootStore }) => {
         if (!keyword) {
             setResult([]);
         } else {
-            const namespace = store.state.namespace;
             searchArticle({
                 keyword,
-                namespace,
             }).then((res) => {
                 console.log(res);
                 setResult(res);

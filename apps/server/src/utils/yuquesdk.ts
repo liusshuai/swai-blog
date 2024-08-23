@@ -71,11 +71,12 @@ export class YuqueSdk {
         return this.get<{ data: V2DocDetail }>(`/repos/${configs.bookId}/docs/${id}`);
     }
 
-    searchDoc(q: string, namespace?: string) {
+    searchDoc(q: string, page: number) {
         return this.get<{ data: V2DocSearchResult[] }>(`/search`, {
             q,
             type: 'doc',
-            scope: namespace,
+            scope: configs.namespace,
+            page,
         });
     }
 }

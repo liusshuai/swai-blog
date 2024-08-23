@@ -3,7 +3,6 @@ import { Doc, DocSearchResult } from '@swai/types';
 
 interface SearchArticleParmas {
     keyword: string;
-    namespace: string;
 }
 export function searchArticle(params: SearchArticleParmas) {
     return get<DocSearchResult[]>('/api/v1/doc/search', params);
