@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
-import { formControlClasses } from '../Form/utils';
+import { formControlClasses, useFormControlCheck } from '../Form/utils';
 import classNames from 'classnames';
 
 export interface TextareaProps
@@ -21,9 +21,22 @@ const RESIZE_MAP = Object.freeze({
 });
 
 const Textarea: React.FC<TextareaProps> = (props) => {
-    const { resize = 'none', append, prepend, rows = 2, className, ...extraProps } = props;
+    const { resize = 'none', append, prepend, rows = 2, className, onInvalid, onFocus, onBlur, ...extraProps } = props;
 
-    const classes = getClassNames('textarea', formControlClasses(), className);
+    const { invalid, onNativeInvalid, onNativeBlur, onNativeFocus } = useFormControlCheck({
+        onInvalid,
+        onFocus,
+        onBlur,
+    });
+
+    const classes = getClassNames(
+        'textarea',
+        formControlClasses(),
+        {
+            'border-error': invalid,
+        },
+        className,
+    );
 
     const controlClasses = useMemo(() => {
         const classes = classNames('w-full h-full outline-none p-2 bg-transparent', RESIZE_MAP[resize]);
@@ -34,7 +47,14 @@ const Textarea: React.FC<TextareaProps> = (props) => {
     return (
         <div className={classes}>
             {prepend ? <div className="px-2 pt-2">{prepend}</div> : null}
-            <textarea className={controlClasses} rows={rows} {...extraProps}></textarea>
+            <textarea
+                className={controlClasses}
+                rows={rows}
+                {...extraProps}
+                onInvalidCapture={onNativeInvalid}
+                onFocus={onNativeFocus}
+                onBlur={onNativeBlur}
+            ></textarea>
             {append ? <div className="px-2 pb-2">{append}</div> : null}
         </div>
     );
