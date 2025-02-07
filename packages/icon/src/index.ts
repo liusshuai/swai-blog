@@ -23,3 +23,5 @@ export { default as MenuFoldIcon } from './MenuFoldIcon';
 export { default as MenuUnFoldIcon } from './MenuUnFoldIcon';
 export { default as PeoplesIcon } from './PeoplesIcon';
 export { default as MoreIcon } from './MoreIcon';
+export { default as CalendarIcon } from './CalendarIcon';
+export { default as MailSearchIcon } from './MailSearchIcon';
