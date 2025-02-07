@@ -30,8 +30,8 @@ const FormItem: React.FC<FormItemProps> = (props) => {
             'form-item mb-8',
             {
                 flex: Boolean(label),
-                'flex-col gap-2': label && _labelPosition === 'top',
-                'items-center gap-4': label && _labelPosition === 'start',
+                'flex-col': label && _labelPosition === 'top',
+                'items-center': label && _labelPosition === 'start',
             },
             className,
         );
@@ -40,6 +40,8 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     const labelClasses = useMemo(() => {
         return getClassNames('form-item__label', 'shrink-0 text-secondary dark:text-secondary-dark', {
             'text-right': label && _labelPosition === 'start' && _labelAlign === 'right',
+            'pe-[16px]': label && _labelPosition === 'start',
+            'mb-[8px]': label && _labelPosition === 'top',
         });
     }, [label, _labelPosition, _labelAlign]);
 
@@ -68,7 +70,12 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     }
 
     return (
-        <div className={classes}>
+        <div
+            className={classes}
+            style={{
+                paddingLeft: !label && _labelPosition === 'start' ? _labelWidth : '',
+            }}
+        >
             {label ? (
                 <label htmlFor={name} className={labelClasses} style={{ width: _labelWidth }}>
                     {required ? (

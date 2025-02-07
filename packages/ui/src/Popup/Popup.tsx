@@ -14,7 +14,7 @@ import { throttle } from 'lodash-es';
 import { getClassNames } from '../utils/getClassNames';
 import { createPortal } from 'react-dom';
 import { Transition } from 'react-transition-group';
-import { isScrollable } from '../utils/dom';
+import { isScrollable, onElementSizeChange } from '../utils/dom';
 
 export type PopupPosition =
     | 'top'
@@ -105,7 +105,7 @@ const Popup = forwardRef<PopupRef, PopupProps>((props, ref) => {
 
     useEffect(() => {
         const update = throttle(updateContentStyle, 200);
-        const disconnect = onSizeChange(anchorRef.current, update);
+        const disconnect = onElementSizeChange(anchorRef.current, update);
 
         return disconnect;
     }, []);
@@ -185,31 +185,6 @@ const Popup = forwardRef<PopupRef, PopupProps>((props, ref) => {
 
 Popup.displayName = 'Popup';
 export default Popup;
-
-function onSizeChange(el: HTMLElement | null, update: () => void) {
-    const obs: ResizeObserver[] = [];
-    let curEl = el;
-    let timer: any;
-
-    const _update = () => {
-        timer && clearTimeout(timer);
-        timer = setTimeout(update, 100);
-    };
-
-    while (curEl !== null) {
-        const ob = new ResizeObserver(_update);
-        ob.observe(curEl);
-        obs.push(ob);
-
-        curEl = curEl.parentElement;
-    }
-
-    return () => {
-        for (const ob of obs) {
-            ob.disconnect();
-        }
-    };
-}
 
 function getRealPosition(anchorEl: HTMLElement, contentEl: HTMLElement, position: PopupPosition, space: number) {
     let newPosition: string = position;
