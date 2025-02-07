@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Card, Drawer, Typography } from '@swai/ui';
+import { Button, Card, Drawer, Typography, Skeleton } from '@swai/ui';
 import Link from 'next/link';
 import FillingMenu from '@/components/filling/FillingMenu';
 import tocStore from '@/store/tocStore';
@@ -48,6 +48,8 @@ const FilingPage = observer(({ store }: { store: typeof tocStore }) => {
                                 {doc.title}
                             </Link>
                         ))}
+                        {docList.length === 0 &&
+                            new Array(5).fill(0).map((row, index) => <Skeleton key={index} animated />)}
                     </div>
                 </Card>
             </div>

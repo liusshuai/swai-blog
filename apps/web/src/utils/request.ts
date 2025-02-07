@@ -51,7 +51,7 @@ export function post<T>(api: string, data?: Record<string, any>) {
 }
 
 function errorHandler(e: Error, reject: (reason?: any) => void) {
-    alert(e.message);
+    alert && alert(e.message);
 
     reject(e);
 }

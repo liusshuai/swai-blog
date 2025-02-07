@@ -34,13 +34,17 @@ export default function ({ detail }: { detail: DocDetail }) {
         node && node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
+    function changeLikeCount(count: number) {
+        setLikeCount(count < 0 ? 0 : count);
+    }
+
     return (
         <ArticleDataContext.Provider
             value={{
                 readCount: detail.read_count,
                 likeCount,
                 commentCount,
-                setLikeCount,
+                setLikeCount: changeLikeCount,
                 setCommentCount,
             }}
         >
