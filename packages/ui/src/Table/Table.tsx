@@ -1,8 +1,12 @@
-import React, { ReactNode, useMemo } from 'react';
+'use client';
+
+import React, { ReactNode, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
 import classNames from 'classnames';
 import { SpinIcon } from '@swai/icon';
+import { debounce } from 'lodash-es';
+import { onElementSizeChange } from '../utils/dom';
 
 export interface TableColumn {
     label: string;
@@ -36,10 +40,17 @@ const Table: React.FC<TableProps> = (props) => {
         source = [],
     } = props;
 
+    const rootRef = useRef(null);
+    const innerRef = useRef(null);
+    const [fixedLeft, setFixedLeft] = useState<boolean>(false);
+    const [fixedRight, setFixedRight] = useState<boolean>(false);
+    const [fixedLeftWidthList, setFixedLeftWidthList] = useState<number[]>([]);
+    const [fixedRightWidthList, setFixedRightWidthList] = useState<number[]>([]);
+
     const rootClasses = useMemo(() => {
         return getClassNames(
             'table',
-            'relative overflow-x-auto',
+            'relative overflow-hidden',
             {
                 border: border,
                 'w-full': true,
@@ -54,7 +65,7 @@ const Table: React.FC<TableProps> = (props) => {
 
     const tableRowClasses = useMemo(() => {
         return classNames(
-            'border-b last:border-b-0',
+            'border-b last:border-b-0 bg-content dark:bg-content-dark',
             {
                 'hover:bg-blue-50': rowHoveredHighlight,
                 'even:bg-gray-50': striped,
@@ -63,19 +74,54 @@ const Table: React.FC<TableProps> = (props) => {
         );
     }, [props.rowClasses]);
 
+    const fixedRightColWidth = useMemo(() => {
+        return fixedRightWidthList.reduce((res, cur) => (res += cur), 0);
+    }, [fixedRightWidthList, columns]);
+
+    const fixedLeftColWidth = useMemo(() => {
+        return fixedLeftWidthList.reduce((res, cur) => (res += cur), 0);
+    }, [fixedLeftWidthList, columns]);
+
+    useLayoutEffect(() => {
+        const update = () => {
+            computeFixedData();
+            innerRef.current && computeShadow(innerRef.current);
+        };
+
+        update();
+
+        const disconnect = onElementSizeChange(rootRef.current, update);
+
+        return disconnect;
+    }, [columns]);
+
     const getTableColClasses = (col: TableColumn) => {
-        return classNames(
-            'px-5 py-3 bg-content dark:bg-content-dark',
-            {
-                'text-center': !col.align || col.align === 'center',
-                'text-left': col.align === 'left',
-                'text-right': col.align === 'right',
-            },
-            [
-                // table col fixed
-                col.fixed ? 'sticky ' + (col.fixed === 'right' ? 'right-0' : 'left-0') : '',
-            ],
-        );
+        return classNames('px-5 py-3 bg-inherit', {
+            'text-center': !col.align || col.align === 'center',
+            'text-left': col.align === 'left',
+            'text-right': col.align === 'right',
+            sticky: col.fixed, // table col fixed
+        });
+    };
+
+    const getTableColStyles = (col: TableColumn, index: number) => {
+        if (col.fixed === 'right') {
+            const rest = fixedRightWidthList.slice(fixedRightWidthList.length - columns.length + index + 1);
+            const restWidth = rest.reduce((res, cur) => (res += cur), 0);
+            return {
+                right: restWidth + 'px',
+            };
+        }
+
+        if (col.fixed === 'left') {
+            const rest = fixedLeftWidthList.slice(0, index);
+            const restWidth = rest.reduce((res, cur) => (res += cur), 0);
+            return {
+                left: restWidth + 'px',
+            };
+        }
+
+        return {};
     };
 
     const renderTableRow = (row: any) => {
@@ -86,43 +132,89 @@ const Table: React.FC<TableProps> = (props) => {
                     key: i,
                     scope: i === 0 ? 'row' : undefined,
                     className: getTableColClasses(col) + ' font-normal',
+                    style: getTableColStyles(col, i),
                 },
                 col.render ? col.render(row) : row[col.prop],
             ),
         );
     };
 
+    function computeFixedData() {
+        if (rootRef.current) {
+            const fixedRightNodeList = (rootRef.current as HTMLElement).querySelectorAll('.col-fixed-right');
+            const fixedLeftNodeList = (rootRef.current as HTMLElement).querySelectorAll('.col-fixed-left');
+            const leftWidthList: number[] = [];
+            const rightWidthList: number[] = [];
+            fixedRightNodeList.forEach((node) => {
+                rightWidthList.push((node as HTMLElement).offsetWidth);
+            });
+            fixedLeftNodeList.forEach((node) => {
+                leftWidthList.push((node as HTMLElement).offsetWidth);
+            });
+            setFixedRightWidthList(rightWidthList);
+            setFixedLeftWidthList(leftWidthList);
+        }
+    }
+
+    function computeShadow(e: React.UIEvent<HTMLDivElement>) {
+        const target = (e.target || e) as HTMLElement;
+        const scrollLeft = target.scrollLeft;
+        const scrollWidth = target.scrollWidth;
+        const targetWidth = target.clientWidth;
+        if (scrollLeft > 0) {
+            setFixedLeft(true);
+        } else {
+            setFixedLeft(false);
+        }
+        if (scrollLeft + targetWidth < scrollWidth) {
+            setFixedRight(true);
+        } else {
+            setFixedRight(false);
+        }
+    }
+
+    const onTableScroll = debounce(computeShadow);
+
     return (
-        <div className={rootClasses}>
-            <table className="w-full min-w-max">
-                <colgroup>
-                    {columns.map((col) => (
-                        <col
-                            key={col.prop}
-                            className={classNames({
-                                'border-r': border,
-                            })}
-                            style={{ width: col.width ? col.width + 'px' : 'auto' }}
-                        />
-                    ))}
-                </colgroup>
-                <thead className={headerClasses}>
-                    <tr>
+        <div ref={rootRef} className={rootClasses}>
+            <div ref={innerRef} className={getClassNames('table__inner overflow-x-auto')} onScroll={onTableScroll}>
+                <table className="w-full min-w-max">
+                    <colgroup>
                         {columns.map((col) => (
-                            <th scope="col" key={col.prop} className={getTableColClasses(col) + ' whitespace-nowrap'}>
-                                {col.label}
-                            </th>
+                            <col
+                                key={col.prop}
+                                className={classNames({
+                                    'border-r': border,
+                                    'col-fixed-right': col.fixed === 'right',
+                                    'col-fixed-left': col.fixed === 'left',
+                                })}
+                                style={{ width: col.width ? col.width + 'px' : 'auto' }}
+                            />
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {source.map((row) => (
-                        <tr key={row[rowKey]} className={tableRowClasses}>
-                            {renderTableRow(row)}
+                    </colgroup>
+                    <thead className={headerClasses}>
+                        <tr className="bg-content dark:bg-content-dark">
+                            {columns.map((col, i) => (
+                                <th
+                                    scope="col"
+                                    key={col.prop}
+                                    className={getTableColClasses(col) + ' whitespace-nowrap'}
+                                    style={getTableColStyles(col, i)}
+                                >
+                                    {col.label}
+                                </th>
+                            ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {source.map((row) => (
+                            <tr key={row[rowKey]} className={tableRowClasses}>
+                                {renderTableRow(row)}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             {source.length === 0 ? (
                 <div className={getClassNames('table__empty', 'min-h-28 text-center pt-12')}>no data.</div>
             ) : null}
@@ -132,6 +224,18 @@ const Table: React.FC<TableProps> = (props) => {
                         <SpinIcon className="animate-spin" />
                     </span>
                 </div>
+            ) : null}
+            {fixedLeftWidthList.length > 0 && fixedLeft ? (
+                <div
+                    className="absolute top-0 w-6 h-full bg-inherit shadow-[6px_0_6px_rgba(0,0,0,.12)]"
+                    style={{ left: `${fixedLeftColWidth - 20}px` }}
+                ></div>
+            ) : null}
+            {fixedRightWidthList.length > 0 && fixedRight ? (
+                <div
+                    className="absolute top-0 w-6 h-full bg-inherit shadow-[-6px_0_6px_rgba(0,0,0,.12)]"
+                    style={{ right: `${fixedRightColWidth - 20}px` }}
+                ></div>
             ) : null}
         </div>
     );
