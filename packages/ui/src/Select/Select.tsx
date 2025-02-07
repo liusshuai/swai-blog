@@ -23,7 +23,7 @@ const Select: React.FC<SelectProps> = (props) => {
     const {
         value,
         size = 'default',
-        placeholder = 'Please select',
+        placeholder = '请选择',
         options = [],
         labelKey = 'label',
         valueKey = 'value',
@@ -42,7 +42,7 @@ const Select: React.FC<SelectProps> = (props) => {
         const op = props.options.find((op) => op[valueKey] === props.value);
 
         return op ? op[labelKey] : '';
-    }, [props.value, props.options]);
+    }, [value, props.options]);
 
     useLayoutEffect(computeContentWidth, []);
 
