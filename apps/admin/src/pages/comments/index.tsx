@@ -24,10 +24,12 @@ export default () => {
         {
             label: 'ID',
             prop: 'id',
+            fixed: 'left',
         },
         {
             label: '内容ID',
             prop: 'contentId',
+            fixed: 'left',
         },
         {
             label: '类型',

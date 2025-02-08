@@ -5,3 +5,4 @@ export * from './Toc';
 export * from './DocSearchResult';
 export * from './Tourist';
 export * from './Comment';
+export * from './MailSendRecord';

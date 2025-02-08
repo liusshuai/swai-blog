@@ -1,6 +1,7 @@
 import { runtimeLogger } from '@/utils/Logger';
 import { MailerWorkerOptions } from '@/worker/MailerWorker';
 import { ChildProcess, fork } from 'child_process';
+import { reject } from 'lodash';
 
 export class MailerJob {
     protected workerPath: string = require.resolve('../worker/MailerWorker');
@@ -9,19 +10,31 @@ export class MailerJob {
     constructor(readonly options: MailerWorkerOptions) {}
 
     async run() {
+        const line = '-'.repeat(10);
+        runtimeLogger.info(line, 'start mailer worker', line);
+
         const worker = await this.createWorker();
 
-        await new Promise((resolve) => {
+        await new Promise((resolve, reject) => {
             worker.on('exit', async (code, signal) => {
+                let err: string = '';
                 if (signal) {
-                    runtimeLogger.error('Worker process terminated due to receipt of signal %s', signal);
+                    err = 'Mail send worker process terminated due to receipt of signal ' + signal;
+                } else if (code !== 0) {
+                    err = 'Mail send worker process process exited with code ' + code;
                 }
 
-                if (code !== 0) {
-                    runtimeLogger.error('Worker process exited with code %s', code);
+                if (err) {
+                    runtimeLogger.error('Mail send failed: ', err);
                 }
 
-                resolve(0);
+                runtimeLogger.info(line, 'Mailer worker ended', line);
+
+                if (err) {
+                    reject(new Error(err));
+                } else {
+                    resolve(0);
+                }
             });
         });
 
@@ -44,6 +57,14 @@ export class MailerJob {
                     FORCE_COLOR: '1',
                 },
                 silent: true,
+            });
+
+            this.worker.stdout?.on('data', (data) => {
+                runtimeLogger.info(data.toString().trim());
+            });
+
+            this.worker.stderr?.on('data', (data) => {
+                runtimeLogger.error(data.toString().trim());
             });
 
             this.worker.send({ ...this.options });

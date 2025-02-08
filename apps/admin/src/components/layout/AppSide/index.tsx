@@ -1,7 +1,7 @@
 import logo from '@/assets/images/logo_white.png';
 import logoShort from '@/assets/images/logo_short.png';
 import { AppSideBar } from '@swai/ui';
-import { CommentIcon, DataScreenIcon, DocSearchIcon, PeoplesIcon } from '@swai/icon';
+import { CommentIcon, DataScreenIcon, DocSearchIcon, PeoplesIcon, MailSearchIcon } from '@swai/icon';
 import type { MenuItem } from '@swai/ui/lib/Menu';
 import { useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -55,6 +55,17 @@ export default (props: AppSideProps) => {
                 },
             ],
         },
+        {
+            icon: <MailSearchIcon size={18} />,
+            label: '邮件管理',
+            name: 'mails',
+            children: [
+                {
+                    label: '发送记录',
+                    name: 'mail-records',
+                },
+            ],
+        },
     ]);
 
     const currentMenu = useMemo(() => {
@@ -70,7 +81,7 @@ export default (props: AppSideProps) => {
             className="shrink-0"
             theme="dark"
             fold={menuFold}
-            head={<img className={`w-full h-full object-cover`} src={menuFold ? logoShort : logo} alt="LSSHUAISL" />}
+            head={<img className={`w-full h-full object-contain`} src={menuFold ? logoShort : logo} alt="LSSHUAISL" />}
             menus={menus.current}
             activeMenu={currentMenu}
             onMenuSelect={onMenuSelect}

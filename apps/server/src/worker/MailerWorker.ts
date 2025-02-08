@@ -1,6 +1,5 @@
 import { omit } from 'lodash';
 import { SendMailOptions, SendMailType, sendEmailVerify } from '../utils/Mailer';
-import { runtimeLogger } from '@/utils/Logger';
 
 export interface MailerWorkerOptions extends SendMailOptions {
     type: SendMailType;
@@ -10,9 +9,8 @@ class MailerWorker {
     readonly errors: Error[] = [];
 
     constructor(readonly options: MailerWorkerOptions) {
-        runtimeLogger.info('start mailer worker');
-        runtimeLogger.info('type: ', options.type);
-        runtimeLogger.info('email: ', JSON.stringify(options.toList));
+        console.info('type: ', options.type);
+        console.info('emails: ', JSON.stringify(options.toList));
     }
 
     get hasError(): boolean {
@@ -32,15 +30,14 @@ class MailerWorker {
                     process.exitCode = 1;
 
                     for (const err of worker.errors) {
-                        runtimeLogger.error(err.toString());
+                        console.error('send mail failed: ', err.toString());
 
                         if (err.stack) {
-                            runtimeLogger.debug(err.stack);
+                            console.debug(err.stack);
                         }
                     }
                 }
 
-                runtimeLogger.info('mailer worker ended, got % errors', worker.errors.length);
                 process.exit();
             }
         });

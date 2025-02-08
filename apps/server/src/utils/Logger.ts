@@ -8,6 +8,8 @@ log4js.configure({
         datefile: {
             type: 'dateFile',
             numBackups: 60,
+            alwaysIncludePattern: true,
+            keepFileExt: true,
             filename: path.resolve(process.cwd(), `../../../runtime/logs/runtime.log`),
         },
     },

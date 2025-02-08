@@ -9,6 +9,7 @@ const Dashboard = React.lazy(() => import('../pages/dashboard'));
 const Docs = React.lazy(() => import('../pages/docs'));
 const Comments = React.lazy(() => import('../pages/comments'));
 const Followers = React.lazy(() => import('../pages/followers'));
+const MailRecords = React.lazy(() => import('../pages/mail-records'));
 
 export default createBrowserRouter([
     {
@@ -35,6 +36,10 @@ export default createBrowserRouter([
             {
                 path: '/followers',
                 element: lazyload(<Followers />),
+            },
+            {
+                path: '/mail-records',
+                element: lazyload(<MailRecords />),
             },
         ],
     },

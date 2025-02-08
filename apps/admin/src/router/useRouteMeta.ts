@@ -58,6 +58,17 @@ export const routeMeta = Object.freeze<Record<string, RouteMeta>>({
             },
         ],
     },
+    '/mail-records': {
+        name: '发送记录',
+        parentNodes: [
+            {
+                name: '邮件管理',
+            },
+            {
+                name: '发送记录',
+            },
+        ],
+    },
 });
 
 export function useRouteMeta() {

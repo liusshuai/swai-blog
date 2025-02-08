@@ -1,3 +1,5 @@
+import { AppDataSource } from '@/common/database';
+import { MailSendRecord, MailSendState, MailSendType } from '@/entity/MailSendRecord';
 import { mailerQueue } from '@/queue/mailerQueue';
 import { getRandomByte } from '@/utils/cryptoToken';
 import { AssertParams, AsyncRouteController, RouteController, RouteControllerResult } from '@swai/route-controller';
@@ -23,8 +25,15 @@ class EmailVerifyController implements AsyncRouteController<EmailVerifyParams, t
             timestamp: Date.now(),
         };
 
+        const mailRecordRepo = AppDataSource.getRepository(MailSendRecord);
+
+        const mailSendRecord = new MailSendRecord();
+        mailSendRecord.email = params.email;
+        mailSendRecord.type = MailSendType.EMAIL_VERIFY;
+        await mailRecordRepo.save(mailSendRecord);
         if (process.env.NODE_ENV === 'production') {
             mailerQueue.push({
+                taskId: mailSendRecord.id,
                 options: {
                     toList: [{ email: params.email }],
                     data: { code },
@@ -32,8 +41,11 @@ class EmailVerifyController implements AsyncRouteController<EmailVerifyParams, t
                 },
             });
         } else {
+            mailSendRecord.state = MailSendState.SUCCESS;
             console.info(code);
         }
+
+        await mailRecordRepo.save(mailSendRecord);
 
         return new RouteControllerResult(true);
     }

@@ -13,7 +13,7 @@ const DEFAULT_ITEM_CLASSES = 'text-primary tablet:hover:text-brand tablet:hover:
 const DARK_ITEM_CLASSES = 'dark:text-primary-dark tablet:dark:hover:bg-blue-100';
 const MENU_ITEM_COMMON_CLASSES = 'cursor-pointer transation-all duration-150 select-none flex items-center gap-3';
 
-export const MENUITEM_CLASSES = classNames('py-2.5 px-4 rounded-feedback', MENU_ITEM_COMMON_CLASSES);
+export const MENUITEM_CLASSES = classNames('py-3 px-4 rounded-feedback', MENU_ITEM_COMMON_CLASSES);
 export const MENUITEM_ACTIVE_CLASSES = 'font-semibold text-white bg-primary';
 export const MENUITEM_INACTIVE_CLASSES = classNames([DEFAULT_ITEM_CLASSES, DARK_ITEM_CLASSES]);
 
