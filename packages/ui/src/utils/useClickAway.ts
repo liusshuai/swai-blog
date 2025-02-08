@@ -5,7 +5,7 @@ type UseClickAwayOptions = {
     eventName: string;
 };
 
-export default function useClickAway(
+export function useClickAway(
     target: Element | (Element | undefined | null)[],
     listener: EventListener,
     options?: UseClickAwayOptions,

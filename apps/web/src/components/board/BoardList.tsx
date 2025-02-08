@@ -73,7 +73,7 @@ const BoardList = observer((props: { store: typeof rootStore }) => {
                 done();
             })
             .catch((e) => {
-                alert(e.message);
+                typeof window !== undefined && alert(e.message);
                 onError();
             });
     }

@@ -9,7 +9,7 @@ import { MONTH_PLAIN_TEXT } from '../utils/constants';
 import { ComponentContext } from '../types/ComponentContext';
 import { ComponentSize } from '../types/ComponentTypes';
 import { PopupRef } from '../Popup/Popup';
-import useClickAway from '../utils/useClickAway';
+import { useClickAway } from '../utils/useClickAway';
 
 interface DatePickerHeadProps {
     onPrev?: () => void;

@@ -66,7 +66,7 @@ export default function ({ detail }: { detail: DocDetail }) {
                 done();
             })
             .catch((e) => {
-                alert(e.message);
+                typeof window !== undefined && alert(e.message);
                 onError();
             });
     }
