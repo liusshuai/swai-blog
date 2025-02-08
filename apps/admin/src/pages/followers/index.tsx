@@ -81,7 +81,7 @@ export default () => {
         {
             label: '操作',
             prop: 'action',
-            width: 180,
+            width: 200,
             fixed: 'right',
             render(row: TouristProfile) {
                 return (

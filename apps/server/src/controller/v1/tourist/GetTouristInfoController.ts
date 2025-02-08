@@ -15,6 +15,7 @@ class GetTouristInfoController implements AsyncRouteController<void, Tourist | n
             });
 
             if (tourist) {
+                ctx.session!.UUID = tourist.uuid;
                 return new RouteControllerResult(tourist);
             }
         }
