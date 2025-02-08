@@ -107,4 +107,8 @@
             @apply mb-0 text-[#333] opacity-70;
         }
     }
+
+    pre {
+        @apply overflow-auto;
+    }
 }

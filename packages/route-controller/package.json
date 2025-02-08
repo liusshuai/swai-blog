@@ -1,35 +1,35 @@
 {
-  "name": "@swai/route-controller",
-  "version": "1.0.0",
-  "description": "",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
-  "scripts": {
-    "example": "nodemon ./example/index.ts",
-    "serve": "tsc -b -w",
-    "build": "tsc -b"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/caller": "^1.0.2",
-    "@types/co-body": "^6.1.3",
-    "@types/koa": "^2.14.0",
-    "@types/lodash": "^4.14.202",
-    "koa": "^2.15.0",
-    "nodemon": "^3.0.3",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "assert": "^2.1.0",
-    "caller": "^1.1.0",
-    "co-body": "^6.1.0",
-    "globby": "^11.0.1",
-    "lodash": "^4.17.21",
-    "winston": "^3.12.0"
-  }
+    "name": "@swai/route-controller",
+    "version": "1.0.0",
+    "description": "",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "files": [
+        "lib"
+    ],
+    "scripts": {
+        "example": "nodemon ./example/index.ts",
+        "serve": "tsc -b -w",
+        "build": "tsc -b"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/caller": "^1.0.2",
+        "@types/co-body": "^6.1.3",
+        "@types/koa": "^2.14.0",
+        "@types/lodash": "^4.14.202",
+        "koa": "^2.15.0",
+        "nodemon": "^3.0.3",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "assert": "^2.1.0",
+        "caller": "^1.1.0",
+        "co-body": "^6.1.0",
+        "globby": "^11.0.1",
+        "lodash": "^4.17.21",
+        "winston": "^3.12.0"
+    }
 }

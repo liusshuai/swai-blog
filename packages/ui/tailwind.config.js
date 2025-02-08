@@ -7,7 +7,7 @@ module.exports = {
         screens: {
             mobile: { max: '719px' },
             tablet: '720px',
-            desktop: '1024px'
+            desktop: '1024px',
         },
         colors: {
             inherit: 'inherit',
@@ -217,6 +217,10 @@ module.exports = {
                 DEFAULT: '#DFE1E6',
                 dark: '#3D3E40',
             },
+            'form-control': {
+                DEFAULT: '#d7d8da',
+                dark: '#505153',
+            },
         }),
         backgroundColor: ({ theme }) => ({
             ...theme('colors'),
@@ -224,18 +228,32 @@ module.exports = {
             dark: '#2E2F31',
             content: {
                 DEFAULT: '#FFFFFF',
-                dark: '#222222'
+                dark: '#222222',
             },
         }),
+        extend: {
+            boxShadow: {
+                'form-control': '0 0 0 4px rgba(94,124,224,0.08)',
+            },
+            keyframes: {
+                shaking: {
+                    '0%, 100%': { transform: 'translateX(0)' },
+                    '25%, 75%': { transform: 'translateX(-4px)' },
+                    '50%': { transform: 'translateX(4px)' },
+                },
+            },
+            animation: {
+                shaking: 'shaking 200ms ease-in-out',
+            },
+        },
     },
     plugins: [
         plugin(function ({ matchUtilities, addBase, theme }) {
-
             addBase({
                 ':root': {
                     '--sw-font-size-base': theme('fontSize.base'),
                     '--sw-text-color-base': theme('textColor.primary'),
-                }
+                },
             });
 
             matchUtilities(
@@ -245,10 +263,9 @@ module.exports = {
                     }),
                 },
                 {
-                    values: theme('spacing')
-                }
+                    values: theme('spacing'),
+                },
             );
-
         }),
     ],
-}
+};

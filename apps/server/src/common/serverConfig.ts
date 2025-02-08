@@ -5,6 +5,7 @@ export default new ServerConfig({
         baseUrl: 'https://www.yuque.com/api/v2',
         authToken: '',
         bookId: undefined,
+        namespace: '',
         login: '',
     },
     database: {
@@ -15,5 +16,14 @@ export default new ServerConfig({
     },
     wx: {
         token: '',
+    },
+    mailer: {
+        host: '',
+        username: '',
+        password: '',
+    },
+    admin: {
+        email: '',
+        nickname: '',
     },
 });

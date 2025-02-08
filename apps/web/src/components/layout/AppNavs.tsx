@@ -34,6 +34,10 @@ export default function AppNavs() {
                 归档
                 <ArrowIcon className="tablet:hidden" size={18} />
             </Link>
+            <Link className={getLinkClasses('/board')} href={'/board'}>
+                留言板
+                <ArrowIcon className="tablet:hidden" size={18} />
+            </Link>
             <a className={getLinkClasses('/about')} target="_blank" href={'https://www.yuque.com/lsshuai'}>
                 关于
                 <ArrowIcon className="tablet:hidden" size={18} />

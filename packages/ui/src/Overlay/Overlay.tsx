@@ -2,12 +2,13 @@
 import React, { useEffect } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
+import { FuncWithoutParams } from '../types/CommonUtils';
 
 export interface OverlayProps extends ComponentContext {
     opacity?: number;
     zIndex?: number;
 
-    onClick?: () => void;
+    onClick?: FuncWithoutParams;
 }
 
 const Overlay: React.FC<OverlayProps> = (props) => {
@@ -35,9 +36,7 @@ const Overlay: React.FC<OverlayProps> = (props) => {
             }}
             onClick={props.onClick}
         >
-            <div className={getClassNames('overlay__body')} onClick={(e) => e.stopPropagation()}>
-                {props.children}
-            </div>
+            {props.children}
         </div>
     );
 };

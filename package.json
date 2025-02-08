@@ -2,9 +2,13 @@
   "private": true,
   "scripts": {
     "serve": "turbo run serve",
-    "build:app": "turbo run build --filter=ui --filter=icon --filter=web",
-    "build:server": "turbo run build --filter=route-controller --filter=server",
-    "test": "vitest"
+    "serve:app": "turbo run serve --filter=!admin",
+    "serve:admin": "turbo run serve --filter=!web",
+    "build:app": "turbo run build --filter=types --filter=ui --filter=icon --filter=web",
+    "build:admin": "turbo run build --filter=types --filter=ui --filter=icon --filter=admin",
+    "build:server": "turbo run build --filter=types --filter=route-controller --filter=server",
+    "test": "vitest",
+    "lint:fix": "prettier ./packages/ ./apps --write"
   },
   "keywords": [],
   "packageManager": "pnpm@8.6.12",

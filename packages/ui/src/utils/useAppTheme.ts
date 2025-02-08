@@ -34,7 +34,9 @@ export default function useAppTheme() {
 }
 
 function getThemeFromSystem() {
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? APP_THEME.Dark : APP_THEME.Light; 
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? APP_THEME.Dark
+        : APP_THEME.Light;
 }
 
 function getThemeFromLocal(key: string) {

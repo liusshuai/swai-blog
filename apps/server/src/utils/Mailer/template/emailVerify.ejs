@@ -1,0 +1,11 @@
+<body>
+    <%- include('./header.ejs'); -%>
+    <main style="font-size: 15px; margin: 30px 0 50px">
+        <p><b><%= nickname %></b> 您好:</p>
+        <p>
+            您的验证码为：<span style="font-size: 20px; font-weight: 600"><%= code %></span>，该验证码有效期
+            <b><%= minutes %>分钟</b>。
+        </p>
+    </main>
+    <%- include('./footer.ejs'); -%>
+</body>

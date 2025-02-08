@@ -1,21 +1,23 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ComponentContext } from '../types/ComponentContext';
-import MoreButton from './PaginationMoreButton';
-import ArrowButton from './PaginationArrowButton';
 import Button from './PaginationButton';
+import { getClassNames } from '../utils/getClassNames';
+import { ArrowIcon, MoreIcon } from '@swai/icon';
+import { ComponentSize } from '../types/ComponentTypes';
 
 export interface PaginationProps extends Omit<ComponentContext, 'children'> {
     total: number;
     page: number;
+    size?: ComponentSize;
     pageSize?: number;
+    pagerCount?: number;
 
     pageChange?: (page: number) => void;
 }
 
-const PAGER_COUNT: number = 7;
 const Pagination: React.FC<PaginationProps> = (props) => {
-    const { total, page, pageSize = 10 } = props;
+    const { total, page, size = 'default', pageSize = 10, pagerCount = 7 } = props;
 
     const count = useMemo(() => Math.ceil(total / pageSize), [total, pageSize]);
     const counts = useMemo(() => {
@@ -27,12 +29,20 @@ const Pagination: React.FC<PaginationProps> = (props) => {
         return counts;
     }, [count]);
 
-    const renderPager = () => {
-        if (count <= PAGER_COUNT) {
+    const renderMoreBtn = (data: 'prev-more' | 'next-more') => {
+        return (
+            <Button data={data} size={size}>
+                <MoreIcon size={18} />
+            </Button>
+        );
+    };
+
+    const renderPager = useCallback(() => {
+        if (count <= pagerCount) {
             return (
                 <>
                     {counts.map((count) => (
-                        <Button key={count} data={count} active={page === count}>
+                        <Button key={count} data={count} active={page === count} size={size}>
                             {count}
                         </Button>
                     ))}
@@ -44,19 +54,19 @@ const Pagination: React.FC<PaginationProps> = (props) => {
             return (
                 <>
                     {counts.slice(0, 5).map((count) => (
-                        <Button key={count} data={count} active={page === count}>
+                        <Button key={count} data={count} active={page === count} size={size}>
                             {count}
                         </Button>
                     ))}
-                    <MoreButton data={'next-more'} />
+                    {renderMoreBtn('next-more')}
                 </>
             );
         } else if (page + 2 >= count - 1) {
             return (
                 <>
-                    <MoreButton data={'prev-more'} />
+                    {renderMoreBtn('prev-more')}
                     {counts.slice(counts.length - 5, counts.length).map((count) => (
-                        <Button key={count} data={count} active={page === count}>
+                        <Button key={count} data={count} active={page === count} size={size}>
                             {count}
                         </Button>
                     ))}
@@ -65,17 +75,17 @@ const Pagination: React.FC<PaginationProps> = (props) => {
         } else {
             return (
                 <>
-                    <MoreButton data={'prev-more'} />
+                    {renderMoreBtn('prev-more')}
                     {[page - 2, page - 1, page, page + 1, page + 2].map((pager) => (
-                        <Button key={pager} data={pager} active={page === pager}>
+                        <Button key={pager} data={pager} active={page === pager} size={size}>
                             {pager}
                         </Button>
                     ))}
-                    <MoreButton data={'next-more'} />
+                    {renderMoreBtn('next-more')}
                 </>
             );
         }
-    };
+    }, [page, count, counts, pagerCount]);
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         if (props.pageChange) {
@@ -101,7 +111,10 @@ const Pagination: React.FC<PaginationProps> = (props) => {
                     break;
                 default:
                     if (/[0-9]/.test(value)) {
-                        props.pageChange(Number(value));
+                        const _page = Number(value);
+                        if (_page !== page) {
+                            props.pageChange(Number(value));
+                        }
                     }
                     break;
             }
@@ -109,20 +122,26 @@ const Pagination: React.FC<PaginationProps> = (props) => {
     }
 
     return (
-        <div className="flex items-center gap-1" onClick={handleClick}>
-            <ArrowButton data={'prev'} />
-            <Button data={1} active={page === 1}>
-                1
-            </Button>
-            {count > 1 ? (
-                <>
-                    {renderPager()}
-                    <Button data={count} active={page === count}>
-                        {count}
-                    </Button>
-                </>
-            ) : null}
-            <ArrowButton data={'next'} direction="right" />
+        <div className={getClassNames('pagination', props.className)}>
+            <div className="flex items-center gap-1" onClick={handleClick}>
+                <Button data={'prev'} disabled={page === 1} size={size}>
+                    <ArrowIcon size={18} direction="down" />
+                </Button>
+                <Button data={1} active={page === 1} size={size}>
+                    1
+                </Button>
+                {count > 1 ? (
+                    <>
+                        {renderPager()}
+                        <Button data={count} active={page === count} size={size}>
+                            {count}
+                        </Button>
+                    </>
+                ) : null}
+                <Button data={'next'} disabled={page === count} size={size}>
+                    <ArrowIcon size={18} />
+                </Button>
+            </div>
         </div>
     );
 };

@@ -7,7 +7,7 @@ import { DoubleArrowIcon } from '@swai/icon';
 export default function ArticleCard({ doc }: { doc: Doc }) {
     return (
         <Card className="flex flex-col-reverse gap-4 mb-2.5 tablet:flex-row tablet:mb-4 mobile:rounded-none tablet:items-center">
-            <div>
+            <div className="grow">
                 <Typography type="title" weight="medium">
                     {doc.title}
                 </Typography>
@@ -16,7 +16,8 @@ export default function ArticleCard({ doc }: { doc: Doc }) {
                 <div className="mt-5 text-xs flex items-center justify-between text-helper dark:text-helper-dark">
                     <div>
                         <span className="me-4 text-stone">阅读({doc.read_count})</span>
-                        <span>喜欢({doc.likes_count})</span>
+                        <span className="me-4">喜欢({doc.likes_count})</span>
+                        <span>评论({doc.comment_count})</span>
                     </div>
                     <Link
                         href={`/article/${doc.id}`}

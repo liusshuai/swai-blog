@@ -19,6 +19,7 @@ export interface Doc {
     likes_count: number;
     read_count: number;
     word_count: number;
+    comment_count: number;
     created_at: string;
     updated_at: string;
 }

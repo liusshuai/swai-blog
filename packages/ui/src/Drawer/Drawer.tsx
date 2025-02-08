@@ -6,6 +6,8 @@ import { CloseIcon } from '@swai/icon';
 import Overlay from '../Overlay';
 import { ComponentContext } from '../types/ComponentContext';
 import { getClassNames } from '../utils/getClassNames';
+import Typography from '../Typography';
+import { FuncWithoutParams } from '../types/CommonUtils';
 
 export type DrawerDirection = 'left' | 'right' | 'bottom' | 'top';
 export interface DrawerProps extends ComponentContext {
@@ -14,8 +16,10 @@ export interface DrawerProps extends ComponentContext {
     showClose?: boolean;
     size?: number | string;
     direction?: DrawerDirection;
+    closeOnClickOverlay?: boolean;
+    actions?: React.ReactNode;
 
-    onClose?: () => void;
+    onClose?: FuncWithoutParams;
 }
 
 const DURATION = 250;
@@ -29,7 +33,7 @@ function isRow(dir: DrawerDirection): boolean {
 }
 
 const Drawer: React.FC<DrawerProps> = (props) => {
-    const { open = false, showClose = true, size, direction = 'left' } = props;
+    const { open = false, showClose = true, closeOnClickOverlay = true, size, direction = 'left' } = props;
 
     const nodeRef = useRef(null);
     const [show, setShow] = useState(open);
@@ -40,9 +44,12 @@ const Drawer: React.FC<DrawerProps> = (props) => {
         }
     }, [open]);
 
-    const defaultStyle: React.CSSProperties = {
-        transition: `transform ${DURATION}ms ease-in-out`,
-    };
+    const defaultStyle = useMemo<React.CSSProperties>(() => {
+        return {
+            transition: `transform ${DURATION}ms ease-in-out`,
+            width: typeof size === 'number' ? `${size}px` : size,
+        };
+    }, [size]);
 
     const overlayClasses = useMemo(() => {
         const classes: string[] = ['flex', 'items-stretch'];
@@ -124,7 +131,11 @@ const Drawer: React.FC<DrawerProps> = (props) => {
 
     return show
         ? createPortal(
-              <Overlay className={overlayClasses} opacity={0.5} onClick={props.onClose}>
+              <Overlay
+                  className={overlayClasses}
+                  opacity={0.5}
+                  onClick={closeOnClickOverlay ? props.onClose : undefined}
+              >
                   <Transition
                       in={props.open}
                       nodeRef={nodeRef}
@@ -141,12 +152,13 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                                   ...defaultStyle,
                                   ...transitionStyles[state],
                               }}
+                              onClick={(e) => e.stopPropagation()}
                           >
                               {props.title ? (
                                   <div
                                       className={getClassNames(
                                           'drawer__head',
-                                          'h-nav',
+                                          'h-12',
                                           'flex',
                                           'justify-between',
                                           'items-center',
@@ -155,13 +167,18 @@ const Drawer: React.FC<DrawerProps> = (props) => {
                                           'dark:text-primary-dark',
                                       )}
                                   >
-                                      {props.title}
+                                      <Typography type="title">{props.title}</Typography>
                                       {showClose ? <CloseIcon size={20} onClick={props.onClose} /> : null}
                                   </div>
                               ) : null}
                               <div className={getClassNames('drawer__body', 'flex-grow', 'p-2.5', 'overflow-y-auto')}>
                                   {props.children}
                               </div>
+                              {props.actions ? (
+                                  <div className={getClassNames('drawer__actions', 'p-2.5 safe-pb-2.5')}>
+                                      {props.actions}
+                                  </div>
+                              ) : null}
                           </div>
                       )}
                   </Transition>
