@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { SendMailOptions, SendMailType, sendEmailVerify } from '../utils/Mailer';
+import { SendMailOptions, SendMailType, sendEmailVerify } from '../utils/mailer';
 
 export interface MailerWorkerOptions extends SendMailOptions {
     type: SendMailType;

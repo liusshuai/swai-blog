@@ -1,7 +1,7 @@
 import ejs from 'ejs';
 import path from 'path';
 import nodemailer from 'nodemailer';
-import config from '../../common/serverConfig';
+import config from '../common/serverConfig';
 
 const sender_address = `"LSSHUAISL" <yigehaoren_gdoer@163.com>`;
 const mailConfig = config.get('mailer');
@@ -48,5 +48,5 @@ export function sendEmailVerify(options: SendMailOptions<{ code: string; [key: s
     options.data.nickname = options.toList[0]?.nickname || '';
     options.data.minutes = '30';
 
-    return sendMailByTemplate('./template/emailVerify.ejs', options);
+    return sendMailByTemplate('../../mail-templates/emailVerify.ejs', options);
 }
